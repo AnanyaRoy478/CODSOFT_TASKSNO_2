@@ -1,0 +1,28 @@
+{
+  "name": "codsoft_tasksno_2",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/AnanyaRoy478/CODSOFT_TASKSNO_2#readme",
+  "bugs": {
+    "url": "https://github.com/AnanyaRoy478/CODSOFT_TASKSNO_2/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnanyaRoy478/CODSOFT_TASKSNO_2.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.9.1",
+    "nodemon": "^3.1.14"
+  }
+}
