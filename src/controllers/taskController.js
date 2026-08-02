@@ -1,6 +1,7 @@
 const Task = require("../models/Task");
 const Project = require("../models/Project");
 const User = require("../models/User");
+const calculateProgress = require("../utils/calculateProgress");
 
 // Create Task
 exports.createTask = async (req, res) => {
@@ -37,7 +38,8 @@ exports.createTask = async (req, res) => {
             priority,
             dueDate
         });
-
+        await calculateProgress(project);
+        
         res.status(201).json({
             message: "Task created successfully.",
             task
@@ -149,7 +151,7 @@ exports.deleteTask = async (req, res) => {
         }
 
         await task.deleteOne();
-
+        await calculateProgress(projectId);
         res.status(200).json({
             message: "Task deleted successfully."
         });
@@ -220,8 +222,9 @@ exports.updateTaskStatus = async (req, res) => {
         } else {
             task.completedAt = null;
         }
-
+        
         await task.save();
+        await calculateProgress(task.project);
 
         res.status(200).json({
             message: "Task status updated successfully.",
