@@ -13,7 +13,7 @@ const {
 } = require("../controllers/taskController");
 
 const authMiddleware = require("../middlewares/authMiddleware");
-const roleMiddleware = require("../middlewears/roleMiddleware");
+const roleMiddleware = require("../middlewares/roleMiddleware");
 
 router.post("/", authMiddleware, createTask);
 

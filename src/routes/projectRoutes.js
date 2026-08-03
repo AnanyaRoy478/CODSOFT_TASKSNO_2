@@ -12,7 +12,7 @@ const {
 } = require("../controllers/projectController");
 
 const authMiddleware = require("../middlewares/authMiddleware");
-const roleMiddleware = require("../middlewears/roleMiddleware");
+const roleMiddleware = require("../middlewares/roleMiddleware");
 
 router.post("/", authMiddleware, createProject);
 router.get("/", authMiddleware, getProjects);
