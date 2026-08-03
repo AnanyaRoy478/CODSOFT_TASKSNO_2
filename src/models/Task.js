@@ -50,6 +50,7 @@ const taskSchema = new mongoose.Schema(
 },
 {
     timestamps: true,
+    versionKey: false
 });
 
 module.exports = mongoose.model("Task", taskSchema);

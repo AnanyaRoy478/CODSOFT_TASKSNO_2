@@ -25,6 +25,7 @@ const activitySchema = new mongoose.Schema(
 },
 {
     timestamps: true,
+    versionKey: false
 });
 
 module.exports = mongoose.model("Activity", activitySchema);

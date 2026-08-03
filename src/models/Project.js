@@ -47,6 +47,7 @@ const projectSchema = new mongoose.Schema(
 },
 {
     timestamps: true,
+    versionKey: false
 });
 
 module.exports = mongoose.model("Project", projectSchema);
