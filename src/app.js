@@ -1,17 +1,3 @@
-// const express = require("express");
-// const cors = require("cors");
-
-// const routes = require("./routes/insight.routes");
-
-// const app = express();
-
-// app.use(cors());
-// app.use(express.json());
-
-// app.use("/api/insights", routes);
-
-// module.exports = app;
-
 const express = require("express");
 const cors = require("cors");
 const errorMiddleware = require("./middlewares/errorMiddleware");
