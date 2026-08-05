@@ -65,8 +65,17 @@ exports.getComments = async (req, res) => {
 // Delete Comment
 exports.deleteComment = async (req, res) => {
     try {
+        const mongoose = require("mongoose");
 
-        const comment = await Comment.findById(req.params.id);
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({
+                message: "Invalid comment ID."
+            });
+        }
+
+        const comment = await Comment.findOne({
+            _id: req.params.id,
+        });
 
         if (!comment) {
             return res.status(404).json({
@@ -74,21 +83,21 @@ exports.deleteComment = async (req, res) => {
             });
         }
 
-        // Only comment owner can delete
-        if (comment.user.toString() !== req.user.id) {
+        if (!comment.user || comment.user.toString() !== req.user.id) {
             return res.status(403).json({
                 message: "Not authorized to delete this comment."
             });
         }
 
-        await comment.deleteOne();
+        comment.is_delete = true;
+        await comment.save();
 
-        res.status(200).json({
+        return res.status(200).json({
             message: "Comment deleted successfully."
         });
 
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message
         });
     }
