@@ -150,7 +150,8 @@ exports.deleteTask = async (req, res) => {
             });
         }
 
-        await task.deleteOne();
+        task.is_delete = true;
+        await task.save();
         await calculateProgress(projectId);
         res.status(200).json({
             message: "Task deleted successfully."
