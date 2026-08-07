@@ -56,7 +56,9 @@ exports.createTask = async (req, res) => {
 exports.getTasks = async (req, res) => {
     try {
 
-        const tasks = await Task.find()
+        const tasks = await Task.find({
+            is_delete: false
+        })
             .populate("project", "title")
             .populate("assignedTo", "name email")
             .populate("createdBy", "name email");

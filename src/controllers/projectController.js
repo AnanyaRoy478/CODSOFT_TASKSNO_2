@@ -39,6 +39,7 @@ exports.getProjects = async (req, res) => {
 
         const projects = await Project.find({
             members: req.user.id
+            ,is_delete: false
         })
             .populate("owner", "name email")
             .populate("members", "name email");

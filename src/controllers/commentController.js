@@ -48,7 +48,8 @@ exports.getComments = async (req, res) => {
     try {
 
         const comments = await Comment.find({
-            task: req.params.taskId
+            task: req.params.taskId,
+            is_delete: false
         })
             .populate("user", "name email")
             .sort({ createdAt: -1 });
