@@ -1,26 +1,29 @@
+const sendResponse = require("../utils/responseUtil");
+
 const roleMiddleware = (...allowedRoles) => {
     return (req, res, next) => {
         try {
-            // Check if user exists
+            // Check if user is authenticated
             if (!req.user) {
-                return res.status(401).json({
-                    message: "Authentication required."
+                return sendResponse(res, 401, false, {
+                    message: "Authentication required.",
+                    data: {}
                 });
             }
 
             // Check if user's role is allowed
             if (!allowedRoles.includes(req.user.role)) {
-                return res.status(403).json({
-                    message: "Access denied. You do not have permission to perform this action."
+                return sendResponse(res, 403, false, {
+                    message: "Access denied. You do not have permission to perform this action.",
+                    data: {}
                 });
             }
 
-            next();
+            // User has required role
+            return next();
 
         } catch (error) {
-            return res.status(500).json({
-                message: error.message
-            });
+            next(error);
         }
     };
 };

@@ -2,104 +2,116 @@ const Comment = require("../models/Comment");
 const Task = require("../models/Task");
 
 // Add Comment
-exports.addComment = async (req, res) => {
+exports.addComment = async (req, res, next) => {
     try {
         const { task, message } = req.body;
 
+        // Validate required fields
         if (!task || !message) {
-            return res.status(400).json({
-                message: "Task ID and comment message are required."
+            return sendResponse(res, 400, false, {
+                message: "Task ID and comment message are required.",
+                data: {}
             });
         }
 
-        // Check if task exists
-        const existingTask = await Task.findById(task);
+        // Check if task exists and is not deleted
+        const existingTask = await Task.findOne({
+            _id: task,
+            is_delete: false
+        });
 
         if (!existingTask) {
-            return res.status(404).json({
-                message: "Task not found."
+            return sendResponse(res, 404, false, {
+                message: "Task not found.",
+                data: {}
             });
         }
 
+        // Create comment
         const comment = await Comment.create({
             task,
             user: req.user.id,
             message
         });
 
+        // Populate user and task information
         const populatedComment = await Comment.findById(comment._id)
             .populate("user", "name email")
             .populate("task", "title");
 
-        res.status(201).json({
+        return sendResponse(res, 201, true, {
             message: "Comment added successfully.",
-            comment: populatedComment
+            data: populatedComment
         });
 
     } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
+        next(error);
     }
 };
 
 // Get Comments for a Task
-exports.getComments = async (req, res) => {
+exports.getComments = async (req, res, next) => {
     try {
-
         const comments = await Comment.find({
-            task: req.params.taskId,
-            is_delete: false
+            task: req.params.taskId
         })
             .populate("user", "name email")
             .sort({ createdAt: -1 });
 
-        res.status(200).json(comments);
+        if (comments.length === 0) {
+            return sendResponse(res, 200, true, {
+                message: "No comments found.",
+                data: []
+            });
+        }
+
+        return sendResponse(res, 200, true, {
+            message: "Comments retrieved successfully.",
+            data: comments
+        });
 
     } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
+        next(error);
     }
 };
 
 // Delete Comment
-exports.deleteComment = async (req, res) => {
+exports.deleteComment = async (req, res, next) => {
     try {
-        const mongoose = require("mongoose");
-
-        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return res.status(400).json({
-                message: "Invalid comment ID."
-            });
-        }
-
         const comment = await Comment.findOne({
             _id: req.params.id,
+            is_delete: false
         });
 
         if (!comment) {
-            return res.status(404).json({
-                message: "Comment not found."
+            return sendResponse(res, 404, false, {
+                message: "Comment not found.",
+                data: {}
             });
         }
 
-        if (!comment.user || comment.user.toString() !== req.user.id) {
-            return res.status(403).json({
-                message: "Not authorized to delete this comment."
+        // Only comment owner can delete
+        if (
+            !comment.user ||
+            comment.user.toString() !== req.user.id
+        ) {
+            return sendResponse(res, 403, false, {
+                message: "Not authorized to delete this comment.",
+                data: {}
             });
         }
 
+        // Soft delete
         comment.is_delete = true;
+
         await comment.save();
 
-        return res.status(200).json({
-            message: "Comment deleted successfully."
+        return sendResponse(res, 200, true, {
+            message: "Comment deleted successfully.",
+            data: {}
         });
 
     } catch (error) {
-        return res.status(500).json({
-            message: error.message
-        });
+        next(error);
     }
 };

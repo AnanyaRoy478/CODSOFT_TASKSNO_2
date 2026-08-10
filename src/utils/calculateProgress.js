@@ -3,33 +3,38 @@ const Project = require("../models/Project");
 
 const calculateProgress = async (projectId) => {
     try {
-        // Count total tasks in the project
         const totalTasks = await Task.countDocuments({
             project: projectId,
+            is_delete: false
         });
 
-        // Count completed tasks
         const completedTasks = await Task.countDocuments({
             project: projectId,
             status: "Completed",
+            is_delete: false
         });
 
-        // Calculate progress percentage
         let progress = 0;
 
         if (totalTasks > 0) {
-            progress = Math.round((completedTasks / totalTasks) * 100);
+            progress = Math.round(
+                (completedTasks / totalTasks) * 100
+            );
         }
 
-        // Update project progress
         await Project.findByIdAndUpdate(projectId, {
-            progress,
+            progress
         });
 
         return progress;
 
     } catch (error) {
-        console.error("Error calculating project progress:", error.message);
+        console.error(
+            "Error calculating project progress:",
+            error.message
+        );
+
+        throw error;
     }
 };
 

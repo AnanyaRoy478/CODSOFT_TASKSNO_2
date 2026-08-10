@@ -1,32 +1,31 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const generateToken = require("../utils/generateToken");
+const sendResponse = require("../utils/responseUtil");
 
 // Register User
-exports.registerUser = async (req, res) => {
+exports.registerUser = async (req, res, next) => {
     try {
         const { name, email, password, role } = req.body;
 
-        // Check required fields
         if (!name || !email || !password) {
-            return res.status(400).json({
-                message: "Please fill all required fields."
+            return sendResponse(res, 400, false, {
+                message: "Please fill all required fields.",
+                data: {}
             });
         }
 
-        // Check if email already exists
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
-            return res.status(400).json({
-                message: "Email already registered."
+            return sendResponse(res, 400, false, {
+                message: "Email already registered.",
+                data: {}
             });
         }
 
-        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create user
         const user = await User.create({
             name,
             email,
@@ -34,107 +33,123 @@ exports.registerUser = async (req, res) => {
             role
         });
 
-        res.status(201).json({
+        return sendResponse(res, 201, true, {
             message: "User registered successfully.",
-            token: generateToken(user._id),
-            user: {
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                role: user.role
+            data: {
+                token: generateToken(user._id),
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role
+                }
             }
         });
 
     } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
+        next(error);
     }
 };
 
-// Login User
-exports.loginUser = async (req, res) => {
-    try {
 
+// Login User
+exports.loginUser = async (req, res, next) => {
+    try {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            return res.status(400).json({
-                message: "Email and password are required."
+            return sendResponse(res, 400, false, {
+                message: "Email and password are required.",
+                data: {}
             });
         }
 
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(401).json({
-                message: "Invalid email or password."
+            return sendResponse(res, 401, false, {
+                message: "Invalid email or password.",
+                data: {}
             });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(
+            password,
+            user.password
+        );
 
         if (!isMatch) {
-            return res.status(401).json({
-                message: "Invalid email or password."
+            return sendResponse(res, 401, false, {
+                message: "Invalid email or password.",
+                data: {}
             });
         }
 
-        res.status(200).json({
+        return sendResponse(res, 200, true, {
             message: "Login successful.",
-            token: generateToken(user._id),
-            user: {
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                role: user.role
+            data: {
+                token: generateToken(user._id),
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role
+                }
             }
         });
 
     } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
+        next(error);
     }
 };
 
-// Get Logged-in User
-exports.getProfile = async (req, res) => {
-    try {
 
-        const user = await User.findById(req.user.id).select("-password");
+// Get Profile
+exports.getProfile = async (req, res, next) => {
+    try {
+        const user = await User
+            .findById(req.user.id)
+            .select("-password");
 
         if (!user) {
-            return res.status(404).json({
-                message: "User not found."
+            return sendResponse(res, 404, false, {
+                message: "User not found.",
+                data: {}
             });
         }
 
-        res.status(200).json(user);
+        return sendResponse(res, 200, true, {
+            message: "Profile retrieved successfully.",
+            data: user
+        });
 
     } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
+        next(error);
     }
 };
 
-// Update Profile
-exports.updateProfile = async (req, res) => {
-    try {
 
+// Update Profile
+exports.updateProfile = async (req, res, next) => {
+    try {
         const { name, email, password } = req.body;
 
         const user = await User.findById(req.user.id);
 
         if (!user) {
-            return res.status(404).json({
-                message: "User not found."
+            return sendResponse(res, 404, false, {
+                message: "User not found.",
+                data: {}
             });
         }
 
-        if (name) user.name = name;
-        if (email) user.email = email;
+        if (name) {
+            user.name = name;
+        }
+
+        if (email) {
+            user.email = email;
+        }
 
         if (password) {
             user.password = await bcrypt.hash(password, 10);
@@ -142,9 +157,9 @@ exports.updateProfile = async (req, res) => {
 
         await user.save();
 
-        res.status(200).json({
+        return sendResponse(res, 200, true, {
             message: "Profile updated successfully.",
-            user: {
+            data: {
                 id: user._id,
                 name: user.name,
                 email: user.email,
@@ -153,8 +168,6 @@ exports.updateProfile = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
+        next(error);
     }
 };

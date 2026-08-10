@@ -1,99 +1,108 @@
 const Project = require("../models/Project");
 const User = require("../models/User");
+const sendResponse = require("../utils/responseUtil");
 
 // Create Project
-exports.createProject = async (req, res) => {
+exports.getProjects = async (req, res, next) => {
     try {
-        const { title, description, startDate, deadline } = req.body;
-
-        if (!title) {
-            return res.status(400).json({
-                message: "Project title is required."
-            });
-        }
-
-        const project = await Project.create({
-            title,
-            description,
-            owner: req.user.id,
-            members: [req.user.id],
-            startDate,
-            deadline
-        });
-
-        res.status(201).json({
-            message: "Project created successfully.",
-            project
-        });
-
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-};
-
-// Get All Projects
-exports.getProjects = async (req, res) => {
-    try {
-
         const projects = await Project.find({
             members: req.user.id
-            ,is_delete: false
         })
             .populate("owner", "name email")
             .populate("members", "name email");
 
-        res.status(200).json(projects);
+        if (projects.length === 0) {
+            return sendResponse(res, 200, true, {
+                message: "No projects found.",
+                data: []
+            });
+        }
+
+        return sendResponse(res, 200, true, {
+            message: "Projects retrieved successfully.",
+            data: projects
+        });
 
     } catch (error) {
-        res.status(500).json({
-            message: error.message
+        next(error);
+    }
+};
+
+// Get All Projects
+exports.getProjects = async (req, res, next) => {
+    try {
+        const projects = await Project.find({
+            members: req.user.id
+        })
+            .populate("owner", "name email")
+            .populate("members", "name email");
+
+        if (projects.length === 0) {
+            return sendResponse(res, 200, true, {
+                message: "No projects found.",
+                data: []
+            });
+        }
+
+        return sendResponse(res, 200, true, {
+            message: "Projects retrieved successfully.",
+            data: projects
         });
+
+    } catch (error) {
+        next(error);
     }
 };
 
 // Get Project By ID
-exports.getProjectById = async (req, res) => {
+exports.getProjectById = async (req, res, next) => {
     try {
-
         const project = await Project.findById(req.params.id)
             .populate("owner", "name email")
             .populate("members", "name email");
 
         if (!project) {
-            return res.status(404).json({
-                message: "Project not found."
+            return sendResponse(res, 404, false, {
+                message: "Project not found.",
+                data: {}
             });
         }
 
-        res.status(200).json(project);
+        return sendResponse(res, 200, true, {
+            message: "Project retrieved successfully.",
+            data: project
+        });
 
     } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
+        next(error);
     }
 };
 
 // Update Project
-exports.updateProject = async (req, res) => {
+exports.updateProject = async (req, res, next) => {
     try {
-
-        const { title, description, startDate, deadline, status, progress } = req.body;
+        const {
+            title,
+            description,
+            startDate,
+            deadline,
+            status,
+            progress
+        } = req.body;
 
         const project = await Project.findById(req.params.id);
 
         if (!project) {
-            return res.status(404).json({
-                message: "Project not found."
+            return sendResponse(res, 404, false, {
+                message: "Project not found.",
+                data: {}
             });
         }
 
-        // Only owner can update
         if (project.owner.toString() !== req.user.id) {
-            return res.status(403).json({
-                message: "Not authorized."
+            return sendResponse(res, 403, false, {
+                message: "Not authorized.",
+                data: {}
             });
         }
 
@@ -102,84 +111,101 @@ exports.updateProject = async (req, res) => {
         if (startDate) project.startDate = startDate;
         if (deadline) project.deadline = deadline;
         if (status) project.status = status;
-        if (progress !== undefined) project.progress = progress;
+
+        if (progress !== undefined) {
+            project.progress = progress;
+        }
 
         await project.save();
 
-        res.status(200).json({
+        return sendResponse(res, 200, true, {
             message: "Project updated successfully.",
-            project
+            data: project
         });
 
     } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
+        next(error);
     }
 };
 
 // Delete Project
-exports.deleteProject = async (req, res) => {
+exports.deleteProject = async (req, res, next) => {
     try {
-
         const project = await Project.findById(req.params.id);
 
         if (!project) {
-            return res.status(404).json({
-                message: "Project not found."
+            return sendResponse(res, 404, false, {
+                message: "Project not found.",
+                data: {}
             });
         }
 
         if (project.owner.toString() !== req.user.id) {
-            return res.status(403).json({
-                message: "Not authorized."
+            return sendResponse(res, 403, false, {
+                message: "Not authorized.",
+                data: {}
             });
         }
-        project.is_delete = true;
-        await project.save();
 
-        res.status(200).json({
-            message: "Project deleted successfully."
+        await project.deleteOne();
+
+        return sendResponse(res, 200, true, {
+            message: "Project deleted successfully.",
+            data: {}
         });
 
     } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
+        next(error);
     }
 };
 
 // Add Member
-exports.addMember = async (req, res) => {
+exports.addMember = async (req, res, next) => {
     try {
-
         const { userId } = req.body;
+
+        if (!userId) {
+            return sendResponse(res, 400, false, {
+                message: "User ID is required.",
+                data: {}
+            });
+        }
 
         const project = await Project.findById(req.params.id);
 
         if (!project) {
-            return res.status(404).json({
-                message: "Project not found."
+            return sendResponse(res, 404, false, {
+                message: "Project not found.",
+                data: {}
             });
         }
 
+        // Only project owner can add members
         if (project.owner.toString() !== req.user.id) {
-            return res.status(403).json({
-                message: "Only project owner can add members."
+            return sendResponse(res, 403, false, {
+                message: "Only project owner can add members.",
+                data: {}
             });
         }
 
         const user = await User.findById(userId);
 
         if (!user) {
-            return res.status(404).json({
-                message: "User not found."
+            return sendResponse(res, 404, false, {
+                message: "User not found.",
+                data: {}
             });
         }
 
-        if (project.members.includes(userId)) {
-            return res.status(400).json({
-                message: "User is already a member."
+        // Check if user is already a member
+        if (
+            project.members.some(
+                member => member.toString() === userId
+            )
+        ) {
+            return sendResponse(res, 400, false, {
+                message: "User is already a member.",
+                data: {}
             });
         }
 
@@ -187,35 +213,67 @@ exports.addMember = async (req, res) => {
 
         await project.save();
 
-        res.status(200).json({
+        const updatedProject = await Project.findById(project._id)
+            .populate("owner", "name email")
+            .populate("members", "name email");
+
+        return sendResponse(res, 200, true, {
             message: "Member added successfully.",
-            project
+            data: updatedProject
         });
 
     } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
+        next(error);
     }
 };
 
-// Remove Member
-exports.removeMember = async (req, res) => {
-    try {
 
+// Remove Member
+exports.removeMember = async (req, res, next) => {
+    try {
         const { userId } = req.body;
+
+        if (!userId) {
+            return sendResponse(res, 400, false, {
+                message: "User ID is required.",
+                data: {}
+            });
+        }
 
         const project = await Project.findById(req.params.id);
 
         if (!project) {
-            return res.status(404).json({
-                message: "Project not found."
+            return sendResponse(res, 404, false, {
+                message: "Project not found.",
+                data: {}
             });
         }
 
+        // Only project owner can remove members
         if (project.owner.toString() !== req.user.id) {
-            return res.status(403).json({
-                message: "Only project owner can remove members."
+            return sendResponse(res, 403, false, {
+                message: "Only project owner can remove members.",
+                data: {}
+            });
+        }
+
+        // Check if user is actually a member
+        const isMember = project.members.some(
+            member => member.toString() === userId
+        );
+
+        if (!isMember) {
+            return sendResponse(res, 400, false, {
+                message: "User is not a member of this project.",
+                data: {}
+            });
+        }
+
+        // Prevent owner from removing themselves
+        if (project.owner.toString() === userId) {
+            return sendResponse(res, 400, false, {
+                message: "Project owner cannot be removed.",
+                data: {}
             });
         }
 
@@ -225,14 +283,16 @@ exports.removeMember = async (req, res) => {
 
         await project.save();
 
-        res.status(200).json({
+        const updatedProject = await Project.findById(project._id)
+            .populate("owner", "name email")
+            .populate("members", "name email");
+
+        return sendResponse(res, 200, true, {
             message: "Member removed successfully.",
-            project
+            data: updatedProject
         });
 
     } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
+        next(error);
     }
 };
