@@ -3,26 +3,33 @@ const User = require("../models/User");
 const sendResponse = require("../utils/responseUtil");
 
 // Create Project
-exports.getProjects = async (req, res, next) => {
+exports.createProject = async (req, res, next) => {
     try {
-        const projects = await Project.find({
-            members: req.user.id
-        })
-            .populate("owner", "name email")
-            .populate("members", "name email");
+        const { title, description, startDate, deadline } = req.body;
 
-        if (projects.length === 0) {
-            return sendResponse(res, 200, true, {
-                message: "No projects found.",
-                data: []
+        if (!title) {
+            return sendResponse(res, 400, false, {
+                message: "Project title is required.",
             });
         }
 
-        return sendResponse(res, 200, true, {
-            message: "Projects retrieved successfully.",
-            data: projects
+        const project = await Project.create({
+            title,
+            description,
+            owner: req.user.id,
+            members: [req.user.id],
+            startDate,
+            deadline,
         });
 
+        const populatedProject = await Project.findById(project._id)
+            .populate("owner", "name email")
+            .populate("members", "name email");
+
+        return sendResponse(res, 201, true, {
+            message: "Project created successfully.",
+            project: populatedProject,
+        });
     } catch (error) {
         next(error);
     }
