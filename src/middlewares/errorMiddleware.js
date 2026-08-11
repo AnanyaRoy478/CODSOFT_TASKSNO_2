@@ -3,18 +3,18 @@ const sendResponse = require("../utils/responseUtil");
 const errorMiddleware = (err, req, res, next) => {
     console.error(err.stack);
 
-    let statusCode = err.statusCode || 500;
+    let statusCode = err.statusCode || 200;
     let message = err.message || "Internal Server Error";
 
     // Invalid MongoDB ObjectId
     if (err.name === "CastError") {
-        statusCode = 400;
+        statusCode = 200;
         message = "Invalid ID.";
     }
 
     // Mongoose Validation Error
     if (err.name === "ValidationError") {
-        statusCode = 400;
+        statusCode = 200;
 
         message = Object.values(err.errors)
             .map(error => error.message)
@@ -23,7 +23,7 @@ const errorMiddleware = (err, req, res, next) => {
 
     // Duplicate key
     if (err.code === 11000) {
-        statusCode = 400;
+        statusCode = 200;
 
         const field = Object.keys(err.keyValue)[0];
 

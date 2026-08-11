@@ -26,7 +26,7 @@ const authMiddleware = async (req, res, next) => {
 
             // User not found
             if (!req.user) {
-                return sendResponse(res, 401, false, {
+                return sendResponse(res, 400, false, {
                     message: "User not found.",
                     data: {}
                 });
@@ -36,14 +36,14 @@ const authMiddleware = async (req, res, next) => {
             return next();
 
         } else {
-            return sendResponse(res, 401, false, {
+            return sendResponse(res, 400, false, {
                 message: "Not authorized. No token provided.",
                 data: {}
             });
         }
 
     } catch (error) {
-        return sendResponse(res, 401, false, {
+        return sendResponse(res, 400, false, {
             message: "Invalid or expired token.",
             data: {}
         });

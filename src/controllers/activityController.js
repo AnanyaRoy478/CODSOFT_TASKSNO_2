@@ -1,6 +1,7 @@
 const Activity = require("../models/Activity");
 const Project = require("../models/Project");
 const Task = require("../models/Task");
+const sendResponse = require("../utils/responseUtil");
 
 // Create Activity
 exports.createActivity = async (req, res, next) => {
@@ -9,7 +10,7 @@ exports.createActivity = async (req, res, next) => {
 
         // Validate action
         if (!action) {
-            return sendResponse(res, 400, false, {
+            return sendResponse(res, 200, false, {
                 message: "Action is required.",
                 data: {}
             });
@@ -29,7 +30,7 @@ exports.createActivity = async (req, res, next) => {
             .populate("project", "title")
             .populate("task", "title");
 
-        return sendResponse(res, 201, true, {
+        return sendResponse(res, 200, true, {
             message: "Activity created successfully.",
             data: populatedActivity
         });
@@ -76,7 +77,7 @@ exports.getTaskActivities = async (req, res, next) => {
         });
 
         if (!task) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "Task not found.",
                 data: {}
             });

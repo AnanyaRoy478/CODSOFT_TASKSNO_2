@@ -9,7 +9,7 @@ exports.registerUser = async (req, res, next) => {
         const { name, email, password, role } = req.body;
 
         if (!name || !email || !password) {
-            return sendResponse(res, 400, false, {
+            return sendResponse(res, 200, false, {
                 message: "Please fill all required fields.",
                 data: {}
             });
@@ -18,7 +18,7 @@ exports.registerUser = async (req, res, next) => {
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
-            return sendResponse(res, 400, false, {
+            return sendResponse(res, 200, false, {
                 message: "Email already registered.",
                 data: {}
             });
@@ -33,7 +33,7 @@ exports.registerUser = async (req, res, next) => {
             role
         });
 
-        return sendResponse(res, 201, true, {
+        return sendResponse(res, 200, true, {
             message: "User registered successfully.",
             data: {
                 token: generateToken(user._id),
@@ -58,7 +58,7 @@ exports.loginUser = async (req, res, next) => {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            return sendResponse(res, 400, false, {
+            return sendResponse(res, 200, false, {
                 message: "Email and password are required.",
                 data: {}
             });
@@ -67,7 +67,7 @@ exports.loginUser = async (req, res, next) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return sendResponse(res, 401, false, {
+            return sendResponse(res, 200, false, {
                 message: "Invalid email or password.",
                 data: {}
             });
@@ -79,7 +79,7 @@ exports.loginUser = async (req, res, next) => {
         );
 
         if (!isMatch) {
-            return sendResponse(res, 401, false, {
+            return sendResponse(res, 200, false, {
                 message: "Invalid email or password.",
                 data: {}
             });
@@ -112,7 +112,7 @@ exports.getProfile = async (req, res, next) => {
             .select("-password");
 
         if (!user) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "User not found.",
                 data: {}
             });
@@ -137,7 +137,7 @@ exports.updateProfile = async (req, res, next) => {
         const user = await User.findById(req.user.id);
 
         if (!user) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "User not found.",
                 data: {}
             });
