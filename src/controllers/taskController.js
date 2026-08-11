@@ -18,7 +18,7 @@ exports.createTask = async (req, res, next) => {
 
         // Validate required fields
         if (!title || !project) {
-            return sendResponse(res, 400, false, {
+            return sendResponse(res, 200, false, {
                 message: "Title and project are required.",
                 data: {}
             });
@@ -31,7 +31,7 @@ exports.createTask = async (req, res, next) => {
         });
 
         if (!existingProject) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "Project not found.",
                 data: {}
             });
@@ -42,7 +42,7 @@ exports.createTask = async (req, res, next) => {
             const user = await User.findById(assignedTo);
 
             if (!user) {
-                return sendResponse(res, 404, false, {
+                return sendResponse(res, 200, false, {
                     message: "Assigned user not found.",
                     data: {}
                 });
@@ -64,7 +64,7 @@ exports.createTask = async (req, res, next) => {
         await calculateProgress(project);
 
         // Return success response
-        return sendResponse(res, 201, true, {
+        return sendResponse(res, 200, true, {
             message: "Task created successfully.",
             data: task
         });
@@ -111,7 +111,7 @@ exports.getTaskById = async (req, res, next) => {
             .populate("createdBy", "name email");
 
         if (!task) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "Task not found.",
                 data: {}
             });
@@ -145,7 +145,7 @@ exports.updateTask = async (req, res, next) => {
         });
 
         if (!task) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "Task not found.",
                 data: {}
             });
@@ -202,7 +202,7 @@ exports.deleteTask = async (req, res, next) => {
         });
 
         if (!task) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "Task not found.",
                 data: {}
             });
@@ -236,7 +236,7 @@ exports.assignTask = async (req, res, next) => {
         const { userId } = req.body;
 
         if (!userId) {
-            return sendResponse(res, 400, false, {
+            return sendResponse(res, 200, false, {
                 message: "User ID is required.",
                 data: {}
             });
@@ -248,7 +248,7 @@ exports.assignTask = async (req, res, next) => {
         });
 
         if (!task) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "Task not found.",
                 data: {}
             });
@@ -257,7 +257,7 @@ exports.assignTask = async (req, res, next) => {
         const user = await User.findById(userId);
 
         if (!user) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "User not found.",
                 data: {}
             });
@@ -289,7 +289,7 @@ exports.updateTaskStatus = async (req, res, next) => {
         const { status } = req.body;
 
         if (!status) {
-            return sendResponse(res, 400, false, {
+            return sendResponse(res, 200, false, {
                 message: "Task status is required.",
                 data: {}
             });
@@ -301,7 +301,7 @@ exports.updateTaskStatus = async (req, res, next) => {
         });
 
         if (!task) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "Task not found.",
                 data: {}
             });
@@ -337,7 +337,7 @@ exports.updateTaskPriority = async (req, res, next) => {
         const { priority } = req.body;
 
         if (!priority) {
-            return sendResponse(res, 400, false, {
+            return sendResponse(res, 200, false, {
                 message: "Task priority is required.",
                 data: {}
             });
@@ -349,7 +349,7 @@ exports.updateTaskPriority = async (req, res, next) => {
         });
 
         if (!task) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "Task not found.",
                 data: {}
             });

@@ -9,7 +9,7 @@ exports.addComment = async (req, res, next) => {
 
         // Validate required fields
         if (!task || !message) {
-            return sendResponse(res, 400, false, {
+            return sendResponse(res, 200, false, {
                 message: "Task ID and comment message are required.",
                 data: {}
             });
@@ -22,7 +22,7 @@ exports.addComment = async (req, res, next) => {
         });
 
         if (!existingTask) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "Task not found.",
                 data: {}
             });
@@ -85,7 +85,7 @@ exports.deleteComment = async (req, res, next) => {
         });
 
         if (!comment) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "Comment not found.",
                 data: {}
             });
@@ -96,7 +96,7 @@ exports.deleteComment = async (req, res, next) => {
             !comment.user ||
             comment.user.toString() !== req.user.id
         ) {
-            return sendResponse(res, 403, false, {
+            return sendResponse(res, 200, false, {
                 message: "Not authorized to delete this comment.",
                 data: {}
             });

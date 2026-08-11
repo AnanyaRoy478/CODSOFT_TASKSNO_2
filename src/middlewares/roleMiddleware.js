@@ -5,7 +5,7 @@ const roleMiddleware = (...allowedRoles) => {
         try {
             // Check if user is authenticated
             if (!req.user) {
-                return sendResponse(res, 401, false, {
+                return sendResponse(res, 200, false, {
                     message: "Authentication required.",
                     data: {}
                 });
@@ -13,7 +13,7 @@ const roleMiddleware = (...allowedRoles) => {
 
             // Check if user's role is allowed
             if (!allowedRoles.includes(req.user.role)) {
-                return sendResponse(res, 403, false, {
+                return sendResponse(res, 200, false, {
                     message: "Access denied. You do not have permission to perform this action.",
                     data: {}
                 });

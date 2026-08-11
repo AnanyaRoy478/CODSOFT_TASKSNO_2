@@ -8,7 +8,7 @@ exports.createProject = async (req, res, next) => {
         const { title, description, startDate, deadline } = req.body;
 
         if (!title) {
-            return sendResponse(res, 400, false, {
+            return sendResponse(res, 200, false, {
                 message: "Project title is required.",
             });
         }
@@ -26,7 +26,7 @@ exports.createProject = async (req, res, next) => {
             .populate("owner", "name email")
             .populate("members", "name email");
 
-        return sendResponse(res, 201, true, {
+        return sendResponse(res, 200, true, {
             message: "Project created successfully.",
             project: populatedProject,
         });
@@ -69,7 +69,7 @@ exports.getProjectById = async (req, res, next) => {
             .populate("members", "name email");
 
         if (!project) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "Project not found.",
                 data: {}
             });
@@ -100,14 +100,14 @@ exports.updateProject = async (req, res, next) => {
         const project = await Project.findById(req.params.id);
 
         if (!project) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "Project not found.",
                 data: {}
             });
         }
 
         if (project.owner.toString() !== req.user.id) {
-            return sendResponse(res, 403, false, {
+            return sendResponse(res, 200, false, {
                 message: "Not authorized.",
                 data: {}
             });
@@ -141,14 +141,14 @@ exports.deleteProject = async (req, res, next) => {
         const project = await Project.findById(req.params.id);
 
         if (!project) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "Project not found.",
                 data: {}
             });
         }
 
         if (project.owner.toString() !== req.user.id) {
-            return sendResponse(res, 403, false, {
+            return sendResponse(res, 200, false, {
                 message: "Not authorized.",
                 data: {}
             });
@@ -172,7 +172,7 @@ exports.addMember = async (req, res, next) => {
         const { userId } = req.body;
 
         if (!userId) {
-            return sendResponse(res, 400, false, {
+            return sendResponse(res, 200, false, {
                 message: "User ID is required.",
                 data: {}
             });
@@ -181,7 +181,7 @@ exports.addMember = async (req, res, next) => {
         const project = await Project.findById(req.params.id);
 
         if (!project) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "Project not found.",
                 data: {}
             });
@@ -189,7 +189,7 @@ exports.addMember = async (req, res, next) => {
 
         // Only project owner can add members
         if (project.owner.toString() !== req.user.id) {
-            return sendResponse(res, 403, false, {
+            return sendResponse(res, 200, false, {
                 message: "Only project owner can add members.",
                 data: {}
             });
@@ -198,7 +198,7 @@ exports.addMember = async (req, res, next) => {
         const user = await User.findById(userId);
 
         if (!user) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "User not found.",
                 data: {}
             });
@@ -210,7 +210,7 @@ exports.addMember = async (req, res, next) => {
                 member => member.toString() === userId
             )
         ) {
-            return sendResponse(res, 400, false, {
+            return sendResponse(res, 200, false, {
                 message: "User is already a member.",
                 data: {}
             });
@@ -241,7 +241,7 @@ exports.removeMember = async (req, res, next) => {
         const { userId } = req.body;
 
         if (!userId) {
-            return sendResponse(res, 400, false, {
+            return sendResponse(res, 200, false, {
                 message: "User ID is required.",
                 data: {}
             });
@@ -250,7 +250,7 @@ exports.removeMember = async (req, res, next) => {
         const project = await Project.findById(req.params.id);
 
         if (!project) {
-            return sendResponse(res, 404, false, {
+            return sendResponse(res, 200, false, {
                 message: "Project not found.",
                 data: {}
             });
@@ -258,7 +258,7 @@ exports.removeMember = async (req, res, next) => {
 
         // Only project owner can remove members
         if (project.owner.toString() !== req.user.id) {
-            return sendResponse(res, 403, false, {
+            return sendResponse(res, 200, false, {
                 message: "Only project owner can remove members.",
                 data: {}
             });
@@ -270,7 +270,7 @@ exports.removeMember = async (req, res, next) => {
         );
 
         if (!isMember) {
-            return sendResponse(res, 400, false, {
+            return sendResponse(res, 200, false, {
                 message: "User is not a member of this project.",
                 data: {}
             });
@@ -278,7 +278,7 @@ exports.removeMember = async (req, res, next) => {
 
         // Prevent owner from removing themselves
         if (project.owner.toString() === userId) {
-            return sendResponse(res, 400, false, {
+            return sendResponse(res, 200, false, {
                 message: "Project owner cannot be removed.",
                 data: {}
             });
