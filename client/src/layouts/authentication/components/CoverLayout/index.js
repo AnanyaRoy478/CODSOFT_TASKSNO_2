@@ -1,6 +1,6 @@
 /**
 =========================================================
-* Material Dashboard 2 React - v2.2.0
+* pROJECT MANAGEMENT React - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -19,11 +19,11 @@ import PropTypes from "prop-types";
 // @mui material components
 import Grid from "@mui/material/Grid";
 
-// Material Dashboard 2 React components
+// pROJECT MANAGEMENT React components
 import MDBox from "components/MDBox";
 // import MDTypography from "components/MDTypography";
 
-// Material Dashboard 2 React example components
+// pROJECT MANAGEMENT React example components
 import DefaultNavbar from "examples/Navbars/DefaultNavbar";
 import PageLayout from "examples/LayoutContainers/PageLayout";
 
@@ -33,7 +33,7 @@ import Footer from "layouts/authentication/components/Footer";
 function CoverLayout({ coverHeight, image, children }) {
   return (
     <PageLayout>
-      <DefaultNavbar
+      {/* <DefaultNavbar
         action={{
           type: "external",
           route: "https://creative-tim.com/product/material-dashboard-react",
@@ -41,7 +41,7 @@ function CoverLayout({ coverHeight, image, children }) {
         }}
         transparent
         light
-      />
+      /> */}
       <MDBox
         width="calc(100% - 2rem)"
         minHeight={coverHeight}
