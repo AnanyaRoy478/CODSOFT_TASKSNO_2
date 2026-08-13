@@ -52,6 +52,8 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 // Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
+import ProtectedRoute from "utils/routes/ProtectedRoute";
+import PublicRoute from "utils/routes/PublicRoute";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -59,7 +61,6 @@ export default function App() {
     miniSidenav,
     direction,
     layout,
-    openConfigurator,
     sidenavColor,
     transparentSidenav,
     whiteSidenav,
@@ -95,9 +96,6 @@ export default function App() {
     }
   };
 
-  // Change the openConfigurator state
-  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
-
   // Setting the dir attribute for the body element
   useEffect(() => {
     document.body.setAttribute("dir", direction);
@@ -122,30 +120,6 @@ export default function App() {
       return null;
     });
 
-  const configsButton = (
-    <MDBox
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      width="3.25rem"
-      height="3.25rem"
-      bgColor="white"
-      shadow="sm"
-      borderRadius="50%"
-      position="fixed"
-      right="2rem"
-      bottom="2rem"
-      zIndex={99}
-      color="dark"
-      sx={{ cursor: "pointer" }}
-      onClick={handleConfiguratorOpen}
-    >
-      <Icon fontSize="small" color="inherit">
-        settings
-      </Icon>
-    </MDBox>
-  );
-
   return direction === "rtl" ? (
     <CacheProvider value={rtlCache}>
       <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
@@ -165,8 +139,15 @@ export default function App() {
         )}
         {layout === "vr" && <Configurator />}
         <Routes>
-          {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          {/* Public routes */}
+          <Route element={<PublicRoute />}>
+            <Route path="/authentication/sign-in" />
+          </Route>
+          {/* Protected routes */}
+          <Route element={<ProtectedRoute />}>{getRoutes(routes)}</Route>
+
+          {/* Unknown routes */}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </ThemeProvider>
     </CacheProvider>
@@ -188,8 +169,16 @@ export default function App() {
       )}
       {layout === "vr" && <Configurator />}
       <Routes>
-        {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+        {/* Public routes */}
+        <Route element={<PublicRoute />}>
+          <Route path="/authentication/sign-in" />
+        </Route>
+
+        {/* Protected routes */}
+        <Route element={<ProtectedRoute />}>{getRoutes(routes)}</Route>
+
+        {/* Unknown routes */}
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </ThemeProvider>
   );
