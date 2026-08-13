@@ -54,6 +54,7 @@ import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
 import ProtectedRoute from "utils/routes/ProtectedRoute";
 import PublicRoute from "utils/routes/PublicRoute";
+import SignIn from "layouts/authentication/sign-in";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -141,7 +142,7 @@ export default function App() {
         <Routes>
           {/* Public routes */}
           <Route element={<PublicRoute />}>
-            <Route path="/authentication/sign-in" />
+            <Route path="/authentication/sign-in" element={<SignIn />} />
           </Route>
           {/* Protected routes */}
           <Route element={<ProtectedRoute />}>{getRoutes(routes)}</Route>
@@ -171,7 +172,7 @@ export default function App() {
       <Routes>
         {/* Public routes */}
         <Route element={<PublicRoute />}>
-          <Route path="/authentication/sign-in" />
+          <Route path="/authentication/sign-in" element={<SignIn />} />
         </Route>
 
         {/* Protected routes */}

@@ -74,14 +74,10 @@ function Basic() {
 
       // Redirect to dashboard
       navigate("/dashboard");
-
     } catch (error) {
-      const message =
-        error.response?.body?.message ||
-        "Unable to login. Please try again.";
+      const message = error.response?.body?.message || "Unable to login. Please try again.";
 
       setError(message);
-
     } finally {
       setLoading(false);
     }
@@ -101,22 +97,13 @@ function Basic() {
           mb={1}
           textAlign="center"
         >
-          <MDTypography
-            variant="h4"
-            fontWeight="medium"
-            color="white"
-            mt={1}
-          >
+          <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
             Sign in
           </MDTypography>
         </MDBox>
 
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox
-            component="form"
-            role="form"
-            onSubmit={handleSubmit}
-          >
+          <MDBox component="form" role="form" onSubmit={handleSubmit}>
             <MDBox mb={2}>
               <MDInput
                 type="email"
@@ -141,23 +128,14 @@ function Basic() {
 
             {error && (
               <MDBox mb={2}>
-                <MDTypography
-                  variant="caption"
-                  color="error"
-                >
+                <MDTypography variant="caption" color="error">
                   {error}
                 </MDTypography>
               </MDBox>
             )}
 
             <MDBox mt={4} mb={1}>
-              <MDButton
-                type="submit"
-                variant="gradient"
-                color="info"
-                fullWidth
-                disabled={loading}
-              >
+              <MDButton type="submit" variant="gradient" color="info" fullWidth disabled={loading}>
                 {loading ? "Signing in..." : "Sign in"}
               </MDButton>
             </MDBox>
@@ -165,7 +143,6 @@ function Basic() {
             <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
                 Don&apos;t have an account?{" "}
-
                 <MDTypography
                   component={Link}
                   to="/authentication/sign-up"

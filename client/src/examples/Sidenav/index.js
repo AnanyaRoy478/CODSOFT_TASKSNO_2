@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 import { useEffect } from "react";
 
 // react-router-dom components
-import { useLocation, NavLink } from "react-router-dom";
+import { useLocation, NavLink, useNavigate } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -140,6 +140,22 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     return returnValue;
   });
 
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    // Remove authentication data
+
+    localStorage.removeItem("token");
+
+    // Optional: remove other stored user data
+
+    localStorage.removeItem("user");
+
+    // Redirect to login
+
+    navigate("/authentication/sign-in", { replace: true });
+  };
+
   return (
     <SidenavRoot
       {...rest}
@@ -188,6 +204,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           variant="gradient"
           color={sidenavColor}
           fullWidth
+          onClick={handleSignOut}
         >
           SIGN OUT
         </MDButton>
