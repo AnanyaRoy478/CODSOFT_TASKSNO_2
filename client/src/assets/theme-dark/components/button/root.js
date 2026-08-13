@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT React - v2.2.0
+* PROJECT MANAGEMENT - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -13,11 +13,11 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-// pROJECT MANAGEMENT React Base Styles
+// PROJECT MANAGEMENT Base Styles
 import typography from "assets/theme-dark/base/typography";
 import borders from "assets/theme-dark/base/borders";
 
-// pROJECT MANAGEMENT React Helper Functions
+// PROJECT MANAGEMENT Helper Functions
 import pxToRem from "assets/theme-dark/functions/pxToRem";
 
 const { fontWeightBold, size } = typography;

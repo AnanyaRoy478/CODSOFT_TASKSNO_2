@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT React - v2.2.0
+* PROJECT MANAGEMENT - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -29,7 +29,7 @@ import Icon from "@mui/material/Icon";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookIcon from "@mui/icons-material/Facebook";
 
-// pROJECT MANAGEMENT React components
+// PROJECT MANAGEMENT components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
@@ -37,7 +37,7 @@ import MDButton from "components/MDButton";
 // Custom styles for the Configurator
 import ConfiguratorRoot from "examples/Configurator/ConfiguratorRoot";
 
-// pROJECT MANAGEMENT React context
+// PROJECT MANAGEMENT context
 import {
   useMaterialUIController,
   setOpenConfigurator,

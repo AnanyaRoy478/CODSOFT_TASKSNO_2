@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT  React - v2.2.0
+* PROJECT MANAGEMENT  React - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -36,7 +36,7 @@ import {
 import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
 
-// pROJECT MANAGEMENT React components
+// PROJECT MANAGEMENT components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDProgress from "components/MDProgress";

@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT React - v2.2.0
+* PROJECT MANAGEMENT - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -20,11 +20,11 @@ import PropTypes from "prop-types";
 import Link from "@mui/material/Link";
 import Icon from "@mui/material/Icon";
 
-// pROJECT MANAGEMENT React components
+// PROJECT MANAGEMENT components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 
-// pROJECT MANAGEMENT React base styles
+// PROJECT MANAGEMENT base styles
 import typography from "assets/theme/base/typography";
 
 function Footer({ company, links }) {
@@ -66,13 +66,6 @@ function Footer({ company, links }) {
             favorite
           </Icon>
         </MDBox>
-        by
-        <Link href={href} target="_blank">
-          <MDTypography variant="button" fontWeight="medium">
-            &nbsp;{name}&nbsp;
-          </MDTypography>
-        </Link>
-        for a better web.
       </MDBox>
       <MDBox
         component="ul"
@@ -101,10 +94,8 @@ function Footer({ company, links }) {
 Footer.defaultProps = {
   company: { href: "https://www.creative-tim.com/", name: "Creative Tim" },
   links: [
-    { href: "https://www.creative-tim.com/", name: "Creative Tim" },
+    { href: "", name: "" },
     { href: "https://www.creative-tim.com/presentation", name: "About Us" },
-    { href: "https://www.creative-tim.com/blog", name: "Blog" },
-    { href: "https://www.creative-tim.com/license", name: "License" },
   ],
 };
 

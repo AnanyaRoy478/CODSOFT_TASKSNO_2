@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT React - v2.2.0
+* PROJECT MANAGEMENT - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -25,19 +25,19 @@ import PropTypes from "prop-types";
 import Container from "@mui/material/Container";
 import Icon from "@mui/material/Icon";
 
-// pROJECT MANAGEMENT React components
+// PROJECT MANAGEMENT components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
 
-// pROJECT MANAGEMENT React example components
+// PROJECT MANAGEMENT example components
 import DefaultNavbarLink from "examples/Navbars/DefaultNavbar/DefaultNavbarLink";
 import DefaultNavbarMobile from "examples/Navbars/DefaultNavbar/DefaultNavbarMobile";
 
-// pROJECT MANAGEMENT React base styles
+// PROJECT MANAGEMENT base styles
 import breakpoints from "assets/theme/base/breakpoints";
 
-// pROJECT MANAGEMENT React context
+// PROJECT MANAGEMENT context
 import { useMaterialUIController } from "context";
 
 function DefaultNavbar({ transparent, light, action }) {

@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT React - v2.2.0
+* PROJECT MANAGEMENT - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -19,14 +19,14 @@ import { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 
-// pROJECT MANAGEMENT React components
+// PROJECT MANAGEMENT components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDAlert from "components/MDAlert";
 import MDButton from "components/MDButton";
 import MDSnackbar from "components/MDSnackbar";
 
-// pROJECT MANAGEMENT React example components
+// PROJECT MANAGEMENT example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";

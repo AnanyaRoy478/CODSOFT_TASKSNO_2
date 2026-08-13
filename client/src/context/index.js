@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT React - v2.2.0
+* PROJECT MANAGEMENT - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -23,13 +23,13 @@ import { createContext, useContext, useReducer, useMemo } from "react";
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
-// pROJECT MANAGEMENT React main context
+// PROJECT MANAGEMENT main context
 const MaterialUI = createContext();
 
 // Setting custom name for the context which is visible on react dev tools
 MaterialUI.displayName = "MaterialUIContext";
 
-// pROJECT MANAGEMENT React reducer
+// PROJECT MANAGEMENT reducer
 function reducer(state, action) {
   switch (action.type) {
     case "MINI_SIDENAV": {
@@ -68,7 +68,7 @@ function reducer(state, action) {
   }
 }
 
-// pROJECT MANAGEMENT React context provider
+// PROJECT MANAGEMENT context provider
 function MaterialUIControllerProvider({ children }) {
   const initialState = {
     miniSidenav: false,
@@ -90,7 +90,7 @@ function MaterialUIControllerProvider({ children }) {
   return <MaterialUI.Provider value={value}>{children}</MaterialUI.Provider>;
 }
 
-// pROJECT MANAGEMENT React custom hook for using context
+// PROJECT MANAGEMENT custom hook for using context
 function useMaterialUIController() {
   const context = useContext(MaterialUI);
 

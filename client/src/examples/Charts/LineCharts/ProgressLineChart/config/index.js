@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT React - v2.1.0
+* PROJECT MANAGEMENT - v2.1.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/nextjs-material-dashboard-pro
@@ -15,7 +15,7 @@ Coded by www.creative-tim.com
 
 /* eslint-disable no-dupe-keys */
 
-// pROJECT MANAGEMENT React base styles
+// PROJECT MANAGEMENT base styles
 import colors from "assets/theme/base/colors";
 import typography from "assets/theme/base/typography";
 

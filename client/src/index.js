@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT React - v2.2.0
+* PROJECT MANAGEMENT - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -18,7 +18,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "App";
 
-// pROJECT MANAGEMENT React Context Provider
+// PROJECT MANAGEMENT Context Provider
 import { MaterialUIControllerProvider } from "context";
 
 const container = document.getElementById("app");

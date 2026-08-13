@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT React - v2.2.0
+* PROJECT MANAGEMENT - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -23,18 +23,18 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Icon from "@mui/material/Icon";
 
-// pROJECT MANAGEMENT React components
+// PROJECT MANAGEMENT components
 import MDBox from "components/MDBox";
 
-// pROJECT MANAGEMENT React example components
+// PROJECT MANAGEMENT example components
 import Sidenav from "examples/Sidenav";
 import Configurator from "examples/Configurator";
 
-// pROJECT MANAGEMENT React themes
+// PROJECT MANAGEMENT themes
 import theme from "assets/theme";
 import themeRTL from "assets/theme/theme-rtl";
 
-// pROJECT MANAGEMENT React Dark Mode themes
+// PROJECT MANAGEMENT Dark Mode themes
 import themeDark from "assets/theme-dark";
 import themeDarkRTL from "assets/theme-dark/theme-rtl";
 
@@ -43,10 +43,10 @@ import rtlPlugin from "stylis-plugin-rtl";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
-// pROJECT MANAGEMENT React routes
+// PROJECT MANAGEMENT routes
 import routes from "routes";
 
-// pROJECT MANAGEMENT React contexts
+// PROJECT MANAGEMENT contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
 
 // Images
@@ -155,13 +155,12 @@ export default function App() {
             <Sidenav
               color={sidenavColor}
               brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-              brandName="pROJECT MANAGEMENT"
+              brandName="PROJECT MANAGEMENT"
               routes={routes}
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}
             />
             <Configurator />
-            {configsButton}
           </>
         )}
         {layout === "vr" && <Configurator />}
@@ -179,13 +178,12 @@ export default function App() {
           <Sidenav
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-            brandName="pROJECT MANAGEMENT"
+            brandName="PROJECT MANAGEMENT"
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />
           <Configurator />
-          {configsButton}
         </>
       )}
       {layout === "vr" && <Configurator />}

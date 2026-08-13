@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT  React - v2.2.0
+* PROJECT MANAGEMENT  React - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -36,17 +36,17 @@ import {
 import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
 
-// pROJECT MANAGEMENT React components
+// PROJECT MANAGEMENT components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 
-// pROJECT MANAGEMENT React helper functions
+// PROJECT MANAGEMENT helper functions
 import gradientChartLine from "assets/theme/functions/gradientChartLine";
 
 // GradientLineChart configurations
 import configs from "examples/Charts/LineCharts/GradientLineChart/configs";
 
-// pROJECT MANAGEMENT React base styles
+// PROJECT MANAGEMENT base styles
 import colors from "assets/theme/base/colors";
 
 ChartJS.register(

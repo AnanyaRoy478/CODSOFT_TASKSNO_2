@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT React - v2.2.0
+* PROJECT MANAGEMENT - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -16,12 +16,12 @@ Coded by www.creative-tim.com
 // @mui material components
 import Fade from "@mui/material/Fade";
 
-// pROJECT MANAGEMENT React base styles
+// PROJECT MANAGEMENT base styles
 import colors from "assets/theme-dark/base/colors";
 import typography from "assets/theme-dark/base/typography";
 import borders from "assets/theme-dark/base/borders";
 
-// pROJECT MANAGEMENT React helper functions
+// PROJECT MANAGEMENT helper functions
 import pxToRem from "assets/theme-dark/functions/pxToRem";
 
 const { black, white } = colors;

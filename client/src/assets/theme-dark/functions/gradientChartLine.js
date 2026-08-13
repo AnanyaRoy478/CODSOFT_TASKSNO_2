@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT React - v2.2.0
+* PROJECT MANAGEMENT - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -17,7 +17,7 @@ Coded by www.creative-tim.com
   The gradientChartLine() function helps you to create a gradient color for the chart line
  */
 
-// pROJECT MANAGEMENT React helper functions
+// PROJECT MANAGEMENT helper functions
 import rgba from "assets/theme-dark/functions/rgba";
 
 function gradientChartLine(chart, color, opacity = 0.2) {

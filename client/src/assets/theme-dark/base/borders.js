@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT React - v2.2.0
+* PROJECT MANAGEMENT - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -14,15 +14,15 @@ Coded by www.creative-tim.com
 */
 
 /**
- * The base border styles for the pROJECT MANAGEMENT React.
+ * The base border styles for the PROJECT MANAGEMENT.
  * You can add new border width, border color or border radius using this file.
- * You can customized the borders value for the entire pROJECT MANAGEMENT React using thie file.
+ * You can customized the borders value for the entire PROJECT MANAGEMENT using thie file.
  */
 
-// pROJECT MANAGEMENT React Base Styles
+// PROJECT MANAGEMENT Base Styles
 import colors from "assets/theme-dark/base/colors";
 
-// pROJECT MANAGEMENT React Helper Functions
+// PROJECT MANAGEMENT Helper Functions
 import pxToRem from "assets/theme-dark/functions/pxToRem";
 import rgba from "assets/theme-dark/functions/rgba";
 

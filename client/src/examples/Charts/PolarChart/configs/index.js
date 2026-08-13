@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT  React - v2.2.0
+* PROJECT MANAGEMENT  React - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 /* eslint-disable no-dupe-keys */
-// pROJECT MANAGEMENT React base styles
+// PROJECT MANAGEMENT base styles
 import colors from "assets/theme/base/colors";
 
 const { gradients, dark } = colors;

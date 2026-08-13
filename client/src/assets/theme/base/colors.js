@@ -1,6 +1,6 @@
 /**
 =========================================================
-* pROJECT MANAGEMENT React - v2.2.0
+* PROJECT MANAGEMENT - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -14,9 +14,9 @@ Coded by www.creative-tim.com
 */
 
 /**
- * The base colors for the pROJECT MANAGEMENT React.
+ * The base colors for the PROJECT MANAGEMENT.
  * You can add new color using this file.
- * You can customized the colors for the entire pROJECT MANAGEMENT React using thie file.
+ * You can customized the colors for the entire PROJECT MANAGEMENT using thie file.
  */
 
 const colors = {
