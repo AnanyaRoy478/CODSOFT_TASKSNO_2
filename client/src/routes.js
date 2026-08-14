@@ -37,7 +37,8 @@ Coded by www.creative-tim.com
 
 // PROJECT MANAGEMENT layouts
 import Dashboard from "layouts/dashboard";
-import Tables from "layouts/tables";
+import Users from "layouts/tables/users";
+import Projects from "layouts/tables/projects";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
@@ -56,35 +57,19 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Tables",
-    key: "tables",
-    icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/tables",
-    component: <Tables />,
-  },
-  {
-    type: "collapse",
-    name: "Profile",
-    key: "profile",
+    name: "Users",
+    key: "users",
     icon: <Icon fontSize="small">person</Icon>,
-    route: "/profile",
-    component: <Profile />,
+    route: "/users",
+    component: <Users />,
   },
   {
     type: "collapse",
-    name: "Sign In",
-    key: "sign-in",
-    icon: <Icon fontSize="small">login</Icon>,
-    route: "/authentication/sign-in",
-    component: <SignIn />,
-  },
-  {
-    type: "collapse",
-    name: "Sign Up",
-    key: "sign-up",
-    icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/authentication/sign-up",
-    component: <SignUp />,
+    name: "Projects",
+    key: "projects",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/projects",
+    component: <Projects />,
   },
 ];
 
