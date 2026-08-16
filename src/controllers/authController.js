@@ -97,6 +97,20 @@ exports.loginUser = async (req, res, next) => {
   }
 };
 
+//Get all users
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find().select("-password");
+
+    return sendResponse(res, 200, true, {
+      message: "Users retrieved successfully.",
+      data: users,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Get Profile
 exports.getProfile = async (req, res, next) => {
   try {
