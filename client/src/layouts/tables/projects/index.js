@@ -20,7 +20,13 @@ import { useEffect, useState } from "react";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-
+import AddIcon from "@mui/icons-material/Add";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import TextField from "@mui/material/TextField";
+import MDButton from "components/MDButton";
 // PROJECT MANAGEMENT components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -36,11 +42,83 @@ import { getProjects } from "api/projectApi";
 
 // Data
 import projectsTableData from "layouts/tables/data/projectsTableData";
+import { createProject } from "api/projectApi";
 
 function Projects() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState("");
+
+  const [projectForm, setProjectForm] = useState({
+    title: "",
+    description: "",
+    deadline: "",
+  });
+
+  const handleOpenDialog = () => {
+    setCreateError("");
+
+    setProjectForm({
+      title: "",
+      description: "",
+      deadline: "",
+    });
+
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    if (creating) return;
+
+    setOpenDialog(false);
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setProjectForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleCreateProject = async () => {
+    try {
+      setCreateError("");
+
+      if (!projectForm.title.trim()) {
+        setCreateError("Project title is required.");
+        return;
+      }
+
+      setCreating(true);
+
+      const response = await createProject(projectForm);
+
+      if (!response.flag) {
+        setCreateError(response.body?.message || "Failed to create project.");
+        return;
+      }
+
+      setOpenDialog(false);
+
+      setProjectForm({
+        title: "",
+        description: "",
+        deadline: "",
+      });
+
+      await fetchProjects();
+    } catch (error) {
+      setCreateError("Unable to create project.");
+    } finally {
+      setCreating(false);
+    }
+  };
 
   const fetchProjects = async () => {
     try {
@@ -81,16 +159,28 @@ function Projects() {
               <MDBox
                 mx={2}
                 mt={-3}
-                py={3}
+                py={2}
                 px={2}
                 variant="gradient"
                 bgColor="info"
                 borderRadius="lg"
                 coloredShadow="info"
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
               >
                 <MDTypography variant="h6" color="white">
                   Projects Table
                 </MDTypography>
+
+                <MDButton
+                  variant="contained"
+                  color="white"
+                  startIcon={<AddIcon />}
+                  onClick={handleOpenDialog}
+                >
+                  Add Project
+                </MDButton>
               </MDBox>
 
               <MDBox pt={3}>
@@ -130,6 +220,66 @@ function Projects() {
                 )}
               </MDBox>
             </Card>
+            <Dialog open={openDialog} onClose={handleCloseDialog} fullWidth maxWidth="sm">
+              <DialogTitle>Create New Project</DialogTitle>
+
+              <DialogContent>
+                {createError && (
+                  <MDTypography variant="caption" color="error">
+                    {createError}
+                  </MDTypography>
+                )}
+
+                <TextField
+                  fullWidth
+                  required
+                  label="Project Title"
+                  name="title"
+                  value={projectForm.title}
+                  onChange={handleChange}
+                  margin="normal"
+                />
+
+                <TextField
+                  fullWidth
+                  label="Description"
+                  name="description"
+                  value={projectForm.description}
+                  onChange={handleChange}
+                  margin="normal"
+                  multiline
+                  rows={4}
+                />
+
+                <TextField
+                  fullWidth
+                  label="Deadline"
+                  name="deadline"
+                  type="date"
+                  value={projectForm.deadline}
+                  onChange={handleChange}
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </DialogContent>
+
+              <DialogActions>
+                <MDButton onClick={handleCloseDialog} disabled={creating}>
+                  Cancel
+                </MDButton>
+
+                <MDButton
+                  variant="gradient"
+                  color="info"
+                  onClick={handleCreateProject}
+                  disabled={creating}
+                >
+                  {creating ? "Creating..." : "Create Project"}
+                </MDButton>
+              </DialogActions>
+            </Dialog>
           </Grid>
         </Grid>
       </MDBox>
