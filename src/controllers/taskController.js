@@ -7,7 +7,7 @@ const sendResponse = require("../utils/responseUtil");
 // Create Task
 exports.createTask = async (req, res, next) => {
   try {
-    const { title, description, project, assignedTo, priority, dueDate } =
+    const { title, description, project, priority, dueDate } =
       req.body;
 
     // Validate required fields
@@ -30,25 +30,11 @@ exports.createTask = async (req, res, next) => {
         data: {},
       });
     }
-
-    // If task is assigned to a user, check user exists
-    if (assignedTo) {
-      const user = await User.findById(assignedTo);
-
-      if (!user) {
-        return sendResponse(res, 200, false, {
-          message: "Assigned user not found.",
-          data: {},
-        });
-      }
-    }
-
     // Create task
     const task = await Task.create({
       title,
       description,
       project,
-      assignedTo,
       createdBy: req.user.id,
       priority,
       dueDate,

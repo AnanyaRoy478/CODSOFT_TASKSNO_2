@@ -13,3 +13,10 @@ export const getTaskById = async (taskId) => {
     method: "GET",
   });
 };
+
+export const createTask = async (taskData) => {
+  return await apiRequest("/tasks", {
+    method: "POST",
+    body: JSON.stringify(taskData),
+  });
+};
