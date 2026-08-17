@@ -39,12 +39,10 @@ Coded by www.creative-tim.com
 import Dashboard from "layouts/dashboard";
 import Users from "layouts/tables/users";
 import Projects from "layouts/tables/projects";
-import Profile from "layouts/profile";
-import SignIn from "layouts/authentication/sign-in";
-import SignUp from "layouts/authentication/sign-up";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+import Tasks from "layouts/tables/tasks";
 
 const routes = [
   {
@@ -70,6 +68,14 @@ const routes = [
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/projects",
     component: <Projects />,
+  },
+  {
+    type: "collapse",
+    name: "tasks",
+    key: "tasks",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/tasks",
+    component: <Tasks />,
   },
 ];
 
