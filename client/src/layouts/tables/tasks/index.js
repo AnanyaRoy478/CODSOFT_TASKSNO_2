@@ -46,17 +46,22 @@ import { getTasks } from "api/taskApi";
 import tasksTableData from "layouts/tables/data/tasksTableData";
 import { getProjects } from "api/projectApi";
 import { createTask } from "api/taskApi";
+import { getAllUsers } from "api/userApi";
+import { updateTask } from "api/taskApi";
 
 function Tasks() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [projects, setProjects] = useState([]);
-
+  const [users, setUsers] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState("");
-
+  const [editDialog, setEditDialog] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editError, setEditError] = useState("");
+  const [selectedTask, setSelectedTask] = useState(null);
   const [taskForm, setTaskForm] = useState({
     title: "",
     description: "",
@@ -64,7 +69,17 @@ function Tasks() {
     priority: "Medium",
     dueDate: "",
   });
+  const [menu, setMenu] = useState(null);
 
+  const openMenu = (event, task) => {
+    setMenu(event.currentTarget);
+    setSelectedTask(task);
+  };
+
+  const closeMenu = () => {
+    setMenu(null);
+    setSelectedTask(null);
+  };
   const fetchProjects = async () => {
     try {
       const response = await getProjects();
@@ -102,12 +117,61 @@ function Tasks() {
     }
   };
 
+  const fetchUsers = async () => {
+    try {
+      const response = await getAllUsers();
+
+      if (response.flag) {
+        setUsers(response.body?.data || []);
+      } else {
+        setUsers([]);
+      }
+    } catch (error) {
+      setUsers([]);
+    }
+  };
+
   useEffect(() => {
     fetchTasks();
     fetchProjects();
+    fetchUsers();
   }, []);
 
-  const { columns: tColumns, rows: tRows } = tasksTableData(tasks);
+  const handleOpenDetails = (task) => {
+    console.log("Details:", task);
+  };
+
+  const handleDeleteTask = async (task) => {
+    console.log("Delete:", task._id);
+  };
+
+  const handleOpenEditDialog = (task) => {
+    setEditError("");
+    setSelectedTask(task);
+
+    setEditForm({
+      title: task.title || "",
+      description: task.description || "",
+      project: task.project?._id || task.project || "",
+      assignedTo: task.assignedTo?._id || task.assignedTo || "",
+      priority: task.priority || "Medium",
+      status: task.status || "Todo",
+      dueDate: task.dueDate ? task.dueDate.substring(0, 10) : "",
+    });
+
+    setEditDialog(true);
+  };
+
+  const { columns: tColumns, rows: tRows } = tasksTableData(
+    tasks,
+    menu,
+    selectedTask,
+    openMenu,
+    closeMenu,
+    handleOpenEditDialog,
+    handleDeleteTask,
+    handleOpenDetails
+  );
 
   const handleOpenDialog = () => {
     setCreateError("");
@@ -121,6 +185,89 @@ function Tasks() {
     });
 
     setOpenDialog(true);
+  };
+
+  const [editForm, setEditForm] = useState({
+    title: "",
+    description: "",
+    project: "",
+    assignedTo: "",
+    priority: "Medium",
+    status: "Todo",
+    dueDate: "",
+  });
+
+  const handleCloseEditDialog = () => {
+    if (editing) return;
+
+    setEditDialog(false);
+    setEditError("");
+    setSelectedTask(null);
+  };
+
+  const handleEditChange = (event) => {
+    const { name, value } = event.target;
+
+    setEditForm((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+  };
+
+  const handleUpdateTask = async () => {
+    try {
+      setEditError("");
+
+      if (!editForm.title.trim()) {
+        setEditError("Task title is required.");
+        return;
+      }
+
+      if (!editForm.project) {
+        setEditError("Please select a project.");
+        return;
+      }
+
+      if (!selectedTask?._id) {
+        setEditError("Task ID is missing.");
+        return;
+      }
+
+      setEditing(true);
+
+      const taskData = {
+        title: editForm.title,
+        description: editForm.description,
+        project: editForm.project,
+        priority: editForm.priority,
+        status: editForm.status,
+        dueDate: editForm.dueDate || undefined,
+      };
+
+      // Only send assignedTo when a user is selected.
+      // This prevents "" from being cast to ObjectId.
+      if (editForm.assignedTo) {
+        taskData.assignedTo = editForm.assignedTo;
+      } else {
+        taskData.assignedTo = "";
+      }
+
+      const response = await updateTask(selectedTask._id, taskData);
+
+      if (!response.flag) {
+        setEditError(response.body?.message || "Failed to update task.");
+        return;
+      }
+
+      setEditDialog(false);
+      setSelectedTask(null);
+
+      await fetchTasks();
+    } catch (error) {
+      setEditError(error.message || "Unable to update task. Please try again.");
+    } finally {
+      setEditing(false);
+    }
   };
 
   const handleCloseDialog = () => {
@@ -303,7 +450,6 @@ function Tasks() {
                 </MenuItem>
               ))}
             </TextField>
-
             <TextField
               select
               fullWidth
@@ -344,6 +490,129 @@ function Tasks() {
               disabled={creating}
             >
               {creating ? "Creating..." : "Create Task"}
+            </MDButton>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog open={editDialog} onClose={handleCloseEditDialog} fullWidth maxWidth="sm">
+          <DialogTitle>Edit Task</DialogTitle>
+
+          <DialogContent>
+            {editError && (
+              <MDBox mt={1}>
+                <MDTypography variant="caption" color="error">
+                  {editError}
+                </MDTypography>
+              </MDBox>
+            )}
+
+            <TextField
+              fullWidth
+              required
+              label="Task Title"
+              name="title"
+              value={editForm.title}
+              onChange={handleEditChange}
+              margin="normal"
+            />
+
+            <TextField
+              fullWidth
+              label="Description"
+              name="description"
+              value={editForm.description}
+              onChange={handleEditChange}
+              margin="normal"
+              multiline
+              rows={4}
+            />
+
+            <TextField
+              select
+              fullWidth
+              required
+              label="Project"
+              name="project"
+              value={editForm.project}
+              onChange={handleEditChange}
+              margin="normal"
+            >
+              {projects.map((project) => (
+                <MenuItem key={project._id} value={project._id}>
+                  {project.title}
+                </MenuItem>
+              ))}
+            </TextField>
+
+            <TextField
+              select
+              fullWidth
+              label="Assigned To"
+              name="assignedTo"
+              value={editForm.assignedTo}
+              onChange={handleEditChange}
+              margin="normal"
+            >
+              <MenuItem value="">Unassigned</MenuItem>
+
+              {users.map((user) => (
+                <MenuItem key={user._id} value={user._id}>
+                  {user.name} ({user.email})
+                </MenuItem>
+              ))}
+            </TextField>
+
+            <TextField
+              select
+              fullWidth
+              label="Priority"
+              name="priority"
+              value={editForm.priority}
+              onChange={handleEditChange}
+              margin="normal"
+            >
+              <MenuItem value="Low">Low</MenuItem>
+              <MenuItem value="Medium">Medium</MenuItem>
+              <MenuItem value="High">High</MenuItem>
+            </TextField>
+
+            <TextField
+              select
+              fullWidth
+              label="Status"
+              name="status"
+              value={editForm.status}
+              onChange={handleEditChange}
+              margin="normal"
+            >
+              <MenuItem value="Todo">Todo</MenuItem>
+
+              <MenuItem value="In Progress">In Progress</MenuItem>
+
+              <MenuItem value="Completed">Completed</MenuItem>
+            </TextField>
+
+            <TextField
+              fullWidth
+              label="Deadline"
+              name="dueDate"
+              type="date"
+              value={editForm.dueDate}
+              onChange={handleEditChange}
+              margin="normal"
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </DialogContent>
+
+          <DialogActions>
+            <MDButton onClick={handleCloseEditDialog} disabled={editing}>
+              Cancel
+            </MDButton>
+
+            <MDButton variant="gradient" color="info" onClick={handleUpdateTask} disabled={editing}>
+              {editing ? "Updating..." : "Update Task"}
             </MDButton>
           </DialogActions>
         </Dialog>

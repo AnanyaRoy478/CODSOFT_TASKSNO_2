@@ -66,27 +66,6 @@ export default function data(projects = []) {
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
 
-  const renderMenu = (
-    <Menu
-      id="simple-menu"
-      anchorEl={menu}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "left",
-      }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={Boolean(menu)}
-      onClose={closeMenu}
-    >
-      <MenuItem onClick={closeMenu}>Action</MenuItem>
-      <MenuItem onClick={closeMenu}>Another action</MenuItem>
-      <MenuItem onClick={closeMenu}>Something else</MenuItem>
-    </Menu>
-  );
-
   return {
     columns: [
       {
@@ -158,9 +137,9 @@ export default function data(projects = []) {
               open={Boolean(menu)}
               onClose={closeMenu}
             >
-              <MenuItem onClick={closeMenu}>Action</MenuItem>
-              <MenuItem onClick={closeMenu}>Another action</MenuItem>
-              <MenuItem onClick={closeMenu}>Something else</MenuItem>
+              <MenuItem onClick={closeMenu}>Details</MenuItem>
+              <MenuItem onClick={closeMenu}>Edit</MenuItem>
+              <MenuItem onClick={closeMenu}>Delete</MenuItem>
             </Menu>
           </>
         ),

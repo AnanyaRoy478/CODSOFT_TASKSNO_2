@@ -20,3 +20,10 @@ export const createTask = async (taskData) => {
     body: JSON.stringify(taskData),
   });
 };
+
+export const updateTask = async (taskId, data) => {
+  return apiRequest(`/tasks/${taskId}`, {
+    method: "PUT",
+    body: data,
+  });
+};

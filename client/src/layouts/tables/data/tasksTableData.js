@@ -2,11 +2,23 @@
 /* eslint-disable react/function-component-definition */
 
 // PROJECT MANAGEMENT components
+import Icon from "@mui/material/Icon";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDBadge from "components/MDBadge";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
-export default function data(tasks = []) {
+export default function data(
+  tasks = [],
+  menu,
+  selectedTask,
+  openMenu,
+  closeMenu,
+  onEdit,
+  onDelete,
+  onDetails
+) {
   const getStatusColor = (status) => {
     switch (status) {
       case "Completed":
@@ -16,6 +28,7 @@ export default function data(tasks = []) {
         return "info";
 
       case "Pending":
+      case "Todo":
         return "warning";
 
       case "Cancelled":
@@ -83,6 +96,11 @@ export default function data(tasks = []) {
         accessor: "dueDate",
         align: "center",
       },
+      {
+        Header: "action",
+        accessor: "action",
+        align: "center",
+      },
     ],
 
     rows: tasks.map((task) => ({
@@ -136,6 +154,75 @@ export default function data(tasks = []) {
         <MDTypography variant="caption" color="text" fontWeight="medium">
           {formatDate(task.dueDate)}
         </MDTypography>
+      ),
+
+      action: (
+        <>
+          <MDTypography
+            component="a"
+            color="text"
+            sx={{ cursor: "pointer" }}
+            onClick={(event) => openMenu(event, task)}
+          >
+            <Icon>more_vert</Icon>
+          </MDTypography>
+
+          <Menu
+            anchorEl={menu}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={Boolean(menu)}
+            onClose={closeMenu}
+          >
+            <MenuItem
+              onClick={() => {
+                const taskToOpen = selectedTask;
+
+                closeMenu();
+
+                if (taskToOpen) {
+                  onDetails(taskToOpen);
+                }
+              }}
+            >
+              Details
+            </MenuItem>
+
+            <MenuItem
+              onClick={() => {
+                const taskToEdit = selectedTask;
+
+                closeMenu();
+
+                if (taskToEdit) {
+                  onEdit(taskToEdit);
+                }
+              }}
+            >
+              Edit
+            </MenuItem>
+
+            <MenuItem
+              onClick={() => {
+                const taskToDelete = selectedTask;
+
+                closeMenu();
+
+                if (taskToDelete) {
+                  onDelete(taskToDelete);
+                }
+              }}
+            >
+              Delete
+            </MenuItem>
+          </Menu>
+        </>
       ),
     })),
   };
