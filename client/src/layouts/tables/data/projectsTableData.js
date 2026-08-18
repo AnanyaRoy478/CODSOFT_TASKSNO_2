@@ -2,11 +2,13 @@
 /* eslint-disable react/function-component-definition */
 
 import Icon from "@mui/material/Icon";
-
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDAvatar from "components/MDAvatar";
 import MDProgress from "components/MDProgress";
+import { useState } from "react";
 
 export default function data(projects = []) {
   const Project = ({ image, name }) => (
@@ -58,6 +60,32 @@ export default function data(projects = []) {
 
     return "working";
   };
+
+  const [menu, setMenu] = useState(null);
+
+  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
+  const closeMenu = () => setMenu(null);
+
+  const renderMenu = (
+    <Menu
+      id="simple-menu"
+      anchorEl={menu}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "left",
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={Boolean(menu)}
+      onClose={closeMenu}
+    >
+      <MenuItem onClick={closeMenu}>Action</MenuItem>
+      <MenuItem onClick={closeMenu}>Another action</MenuItem>
+      <MenuItem onClick={closeMenu}>Something else</MenuItem>
+    </Menu>
+  );
 
   return {
     columns: [
@@ -111,9 +139,30 @@ export default function data(projects = []) {
         completion: <Progress color={getProgressColor(progress)} value={progress} />,
 
         action: (
-          <MDTypography component="a" href={`/projects/${project._id}`} color="text">
-            <Icon>more_vert</Icon>
-          </MDTypography>
+          <>
+            <MDTypography component="a" onClick={openMenu} color="text" sx={{ cursor: "pointer" }}>
+              <Icon>more_vert</Icon>
+            </MDTypography>
+
+            <Menu
+              id="simple-menu"
+              anchorEl={menu}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(menu)}
+              onClose={closeMenu}
+            >
+              <MenuItem onClick={closeMenu}>Action</MenuItem>
+              <MenuItem onClick={closeMenu}>Another action</MenuItem>
+              <MenuItem onClick={closeMenu}>Something else</MenuItem>
+            </Menu>
+          </>
         ),
       };
     }),

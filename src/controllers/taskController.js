@@ -7,8 +7,7 @@ const sendResponse = require("../utils/responseUtil");
 // Create Task
 exports.createTask = async (req, res, next) => {
   try {
-    const { title, description, project, priority, dueDate } =
-      req.body;
+    const { title, description, project, priority, dueDate } = req.body;
 
     // Validate required fields
     if (!title || !project) {

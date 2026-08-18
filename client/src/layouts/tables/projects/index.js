@@ -36,7 +36,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
-
+import data from "layouts/dashboard/components/Projects/data";
 // API
 import { getProjects } from "api/projectApi";
 
