@@ -106,7 +106,7 @@ exports.getTaskById = async (req, res, next) => {
 // Update Task
 exports.updateTask = async (req, res, next) => {
   try {
-    const { title, description, priority, dueDate, status } = req.body;
+    const { title, description, priority,assignedTo, dueDate, status } = req.body;
 
     const task = await Task.findOne({
       _id: req.params.id,
@@ -134,6 +134,21 @@ exports.updateTask = async (req, res, next) => {
 
     if (dueDate !== undefined) {
       task.dueDate = dueDate;
+    }
+
+    if (assignedTo !== undefined) {
+      if (assignedTo === "") {
+        task.assignedTo = null; // Unassign the task
+      } else {
+        const user = await User.findById(assignedTo);
+        if (!user) {
+          return sendResponse(res, 200, false, {
+            message: "User not found.",
+            data: {},
+          });
+        }
+        task.assignedTo = assignedTo;
+      }
     }
 
     if (status !== undefined) {

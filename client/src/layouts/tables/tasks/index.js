@@ -241,6 +241,7 @@ function Tasks() {
         project: editForm.project,
         priority: editForm.priority,
         status: editForm.status,
+        assignedTo: editForm.assignedTo || "",
         dueDate: editForm.dueDate || undefined,
       };
 

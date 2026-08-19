@@ -18,6 +18,7 @@ const apiRequest = async (endpoint, options = {}) => {
   const response = await fetch(`${API_URL}${endpoint}`, {
     ...options,
     headers,
+    body: options.body ? JSON.stringify(options.body) : undefined,
   });
 
   // Try to parse JSON response
