@@ -22,11 +22,17 @@ export const createTask = async (taskData) => {
 };
 
 export const updateTask = async (taskId, data) => {
-  console.log("UPDATE TASK ID:", taskId);
-  console.log("UPDATE TASK DATA:", data);
-  console.log("ASSIGNED TO:", data.assignedTo);
+  // console.log("UPDATE TASK ID:", taskId);
+  // console.log("UPDATE TASK DATA:", data);
+  // console.log("ASSIGNED TO:", data.assignedTo);
   return apiRequest(`/tasks/${taskId}`, {
     method: "PUT",
     body: data,
+  });
+};
+
+export const deleteTask = async (taskId) => {
+  return apiRequest(`/tasks/${taskId}`, {
+    method: "DELETE",
   });
 };

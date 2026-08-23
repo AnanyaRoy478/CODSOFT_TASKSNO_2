@@ -135,9 +135,9 @@ exports.getProfile = async (req, res, next) => {
 // Update Profile
 exports.updateProfile = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, password } = req.body;
 
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.params.id);
 
     if (!user) {
       return sendResponse(res, 200, false, {
@@ -148,10 +148,6 @@ exports.updateProfile = async (req, res, next) => {
 
     if (name) {
       user.name = name;
-    }
-
-    if (email) {
-      user.email = email;
     }
 
     if (password) {

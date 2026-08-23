@@ -19,9 +19,9 @@ const apiRequest = async (endpoint, options = {}) => {
     options.body !== undefined && typeof options.body !== "string"
       ? JSON.stringify(options.body)
       : options.body;
-  console.log("TOKEN:", token);
-  console.log("REQUEST URL:", `${API_URL}${endpoint}`);
-  console.log("HEADERS:", headers);
+  // console.log("TOKEN:", token);
+  // console.log("REQUEST URL:", `${API_URL}${endpoint}`);
+  // console.log("HEADERS:", headers);
   const response = await fetch(`${API_URL}${endpoint}`, {
     ...options,
     headers,

@@ -26,7 +26,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-
 import AddIcon from "@mui/icons-material/Add";
 // PROJECT MANAGEMENT components
 import MDBox from "components/MDBox";
@@ -48,6 +47,8 @@ import { getProjects } from "api/projectApi";
 import { createTask } from "api/taskApi";
 import { getAllUsers } from "api/userApi";
 import { updateTask } from "api/taskApi";
+import { getTaskById } from "api/taskApi";
+import { deleteTask } from "api/taskApi";
 
 function Tasks() {
   const [tasks, setTasks] = useState([]);
@@ -62,6 +63,9 @@ function Tasks() {
   const [editing, setEditing] = useState(false);
   const [editError, setEditError] = useState("");
   const [selectedTask, setSelectedTask] = useState(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
   const [taskForm, setTaskForm] = useState({
     title: "",
     description: "",
@@ -91,6 +95,55 @@ function Tasks() {
       }
     } catch (error) {
       setProjects([]);
+    }
+  };
+
+  const handleDetails = async (task) => {
+    try {
+      setActionLoading(true);
+
+      const response = await getTaskById(task._id);
+
+      if (response.flag) {
+        setSelectedTask(response.body?.data);
+        setDetailsOpen(true);
+      } else {
+        setError(response.body?.message || "Failed to fetch task details.");
+      }
+    } catch (err) {
+      setError("Unable to load task details.");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDelete = (task) => {
+    setSelectedTask(task);
+    setDeleteOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!selectedTask?._id) {
+      return;
+    }
+
+    try {
+      setActionLoading(true);
+
+      const response = await deleteTask(selectedTask._id);
+
+      if (response.flag) {
+        setDeleteOpen(false);
+        setSelectedTask(null);
+
+        await fetchTasks();
+      } else {
+        setError(response.body?.message || "Failed to delete task.");
+      }
+    } catch (err) {
+      setError("Unable to delete task. Please try again.");
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -170,7 +223,9 @@ function Tasks() {
     closeMenu,
     handleOpenEditDialog,
     handleDeleteTask,
-    handleOpenDetails
+    handleOpenDetails,
+    handleDelete,
+    handleDetails
   );
 
   const handleOpenDialog = () => {
@@ -402,6 +457,91 @@ function Tasks() {
             </Card>
           </Grid>
         </Grid>
+        <Dialog open={detailsOpen} onClose={() => setDetailsOpen(false)} fullWidth maxWidth="sm">
+          <DialogTitle>Task Details</DialogTitle>
+
+          <DialogContent dividers>
+            {selectedTask && (
+              <MDBox>
+                <MDTypography variant="h6" mb={2}>
+                  {selectedTask.title}
+                </MDTypography>
+
+                <MDTypography variant="body2" mb={2}>
+                  <strong>Description:</strong> {selectedTask.description || "No description"}
+                </MDTypography>
+
+                <MDTypography variant="body2" mb={2}>
+                  <strong>Project:</strong> {selectedTask.project?.title || "No project"}
+                </MDTypography>
+
+                <MDTypography variant="body2" mb={2}>
+                  <strong>Assigned To:</strong> {selectedTask.assignedTo?.name || "Unassigned"}
+                </MDTypography>
+
+                <MDTypography variant="body2" mb={2}>
+                  <strong>Email:</strong> {selectedTask.assignedTo?.email || "N/A"}
+                </MDTypography>
+
+                <MDTypography variant="body2" mb={2}>
+                  <strong>Priority:</strong> {selectedTask.priority}
+                </MDTypography>
+
+                <MDTypography variant="body2" mb={2}>
+                  <strong>Status:</strong> {selectedTask.status}
+                </MDTypography>
+
+                <MDTypography variant="body2">
+                  <strong>Due Date:</strong>{" "}
+                  {selectedTask.dueDate
+                    ? new Date(selectedTask.dueDate).toLocaleDateString()
+                    : "No date"}
+                </MDTypography>
+              </MDBox>
+            )}
+          </DialogContent>
+
+          <DialogActions>
+            <MDButton variant="gradient" color="info" onClick={() => setDetailsOpen(false)}>
+              Close
+            </MDButton>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)} fullWidth maxWidth="xs">
+          <DialogTitle>Delete Task</DialogTitle>
+
+          <DialogContent>
+            <MDTypography variant="body2">
+              Are you sure you want to delete <strong>{selectedTask?.title}</strong>?
+            </MDTypography>
+
+            <MDTypography variant="caption" color="text" mt={1} display="block">
+              This action will remove the task from the task list.
+            </MDTypography>
+          </DialogContent>
+
+          <DialogActions>
+            <MDButton
+              variant="outlined"
+              color="dark"
+              onClick={() => setDeleteOpen(false)}
+              disabled={actionLoading}
+            >
+              Cancel
+            </MDButton>
+
+            <MDButton
+              variant="gradient"
+              color="error"
+              onClick={confirmDelete}
+              disabled={actionLoading}
+            >
+              {actionLoading ? "Deleting..." : "Delete"}
+            </MDButton>
+          </DialogActions>
+        </Dialog>
+
         <Dialog open={openDialog} onClose={handleCloseDialog} fullWidth maxWidth="sm">
           <DialogTitle>Create New Task</DialogTitle>
 

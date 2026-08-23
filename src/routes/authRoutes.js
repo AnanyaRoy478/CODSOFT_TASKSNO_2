@@ -18,6 +18,6 @@ router.post("/login", loginUser);
 // Protected Routes
 router.get("/all-users", authMiddleware, getAllUsers);
 router.get("/profile", authMiddleware, getProfile);
-router.put("/profile", authMiddleware, updateProfile);
+router.put("/profile/:id", authMiddleware, updateProfile);
 
 module.exports = router;

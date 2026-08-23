@@ -38,9 +38,7 @@ exports.createProject = async (req, res, next) => {
 // Get All Projects
 exports.getProjects = async (req, res, next) => {
   try {
-    const projects = await Project.find({
-      members: req.user.id,
-    })
+    const projects = await Project.find({ is_delete: false })
       .populate("owner", "name email")
       .populate("members", "name email");
 

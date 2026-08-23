@@ -46,6 +46,7 @@ import { getProjects } from "api/projectApi";
 // Data
 import projectsTableData from "layouts/tables/data/projectsTableData";
 import { createProject } from "api/projectApi";
+import { updateProject } from "api/projectApi";
 
 function Projects() {
   const [projects, setProjects] = useState([]);
@@ -141,7 +142,7 @@ function Projects() {
         setError(response.body?.message || "Failed to update project.");
       }
     } catch (err) {
-      setError("Unable to update project.");
+      setError(err.message || "Unable to update project.");
     }
   };
 

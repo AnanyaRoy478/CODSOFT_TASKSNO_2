@@ -6,8 +6,12 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDAvatar from "components/MDAvatar";
 import MDBadge from "components/MDBadge";
+import Icon from "@mui/material/Icon";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { useState } from "react";
 
-export default function data(users = []) {
+export default function data(users = [], onEdit) {
   const Author = ({ image, name, email }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
       <MDAvatar src={image} name={name} size="sm" />
@@ -21,6 +25,37 @@ export default function data(users = []) {
       </MDBox>
     </MDBox>
   );
+
+  function UserActions({ user, onEdit }) {
+    const [menu, setMenu] = useState(null);
+
+    const openMenu = (event) => {
+      setMenu(event.currentTarget);
+    };
+
+    const closeMenu = () => {
+      setMenu(null);
+    };
+
+    return (
+      <>
+        <MDTypography component="a" color="text" sx={{ cursor: "pointer" }} onClick={openMenu}>
+          <Icon>more_vert</Icon>
+        </MDTypography>
+
+        <Menu anchorEl={menu} open={Boolean(menu)} onClose={closeMenu}>
+          <MenuItem
+            onClick={() => {
+              closeMenu();
+              onEdit(user);
+            }}
+          >
+            Edit
+          </MenuItem>
+        </Menu>
+      </>
+    );
+  }
 
   const getStatus = (user) => {
     if (user.is_active === false) {
@@ -110,17 +145,7 @@ export default function data(users = []) {
         </MDTypography>
       ),
 
-      action: (
-        <MDTypography
-          component="a"
-          href={`/users/${user._id}`}
-          variant="caption"
-          color="text"
-          fontWeight="medium"
-        >
-          View
-        </MDTypography>
-      ),
+      action: <UserActions user={user} onEdit={onEdit} />,
     })),
   };
 }
