@@ -27,10 +27,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import TextField from "@mui/material/TextField";
 import MDButton from "components/MDButton";
+import Button from "@mui/material/Button";
+import MDInput from "components/MDInput";
 // PROJECT MANAGEMENT components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
-
+import { getProjectById } from "api/projectApi";
+import { deleteProject } from "api/projectApi";
 // PROJECT MANAGEMENT example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
@@ -52,12 +55,95 @@ function Projects() {
   const [openDialog, setOpenDialog] = useState(false);
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState("");
-
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [editForm, setEditForm] = useState({
+    title: "",
+    description: "",
+    status: "",
+  });
   const [projectForm, setProjectForm] = useState({
     title: "",
     description: "",
     deadline: "",
   });
+
+  const handleEdit = (project) => {
+    setSelectedProject(project);
+
+    setEditForm({
+      title: project.title || "",
+      description: project.description || "",
+      status: project.status || "",
+    });
+
+    setEditOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!selectedProject?._id) {
+      return;
+    }
+
+    try {
+      const response = await deleteProject(selectedProject._id);
+
+      if (response.flag) {
+        setProjects((prevProjects) =>
+          prevProjects.filter((project) => project._id !== selectedProject._id)
+        );
+
+        setDeleteOpen(false);
+        setSelectedProject(null);
+      } else {
+        setError(response.body?.message || "Failed to delete project.");
+      }
+    } catch (err) {
+      setError("Unable to delete project.");
+    }
+  };
+
+  const handleDetails = async (project) => {
+    try {
+      const response = await getProjectById(project._id);
+
+      if (response.flag) {
+        setSelectedProject(response.body?.data);
+        setDetailsOpen(true);
+      } else {
+        setError(response.body?.message || "Failed to load project details.");
+      }
+    } catch (err) {
+      setError("Unable to load project details.");
+    }
+  };
+
+  const handleUpdateProject = async () => {
+    if (!selectedProject?._id) {
+      return;
+    }
+
+    try {
+      const response = await updateProject(selectedProject._id, editForm);
+
+      if (response.flag) {
+        setProjects((prevProjects) =>
+          prevProjects.map((project) =>
+            project._id === selectedProject._id ? response.body.data : project
+          )
+        );
+
+        setEditOpen(false);
+        setSelectedProject(null);
+      } else {
+        setError(response.body?.message || "Failed to update project.");
+      }
+    } catch (err) {
+      setError("Unable to update project.");
+    }
+  };
 
   const handleOpenDialog = () => {
     setCreateError("");
@@ -146,7 +232,17 @@ function Projects() {
     fetchProjects();
   }, []);
 
-  const { columns: pColumns, rows: pRows } = projectsTableData(projects);
+  const handleDelete = (project) => {
+    setSelectedProject(project);
+    setDeleteOpen(true);
+  };
+
+  const { columns: pColumns, rows: pRows } = projectsTableData(
+    projects,
+    handleDetails,
+    handleEdit,
+    handleDelete
+  );
 
   return (
     <DashboardLayout>
@@ -220,6 +316,98 @@ function Projects() {
                 )}
               </MDBox>
             </Card>
+
+            <Dialog
+              open={detailsOpen}
+              onClose={() => setDetailsOpen(false)}
+              fullWidth
+              maxWidth="sm"
+            >
+              <DialogTitle>Project Details</DialogTitle>
+
+              <DialogContent>
+                {selectedProject && (
+                  <MDBox py={2}>
+                    <MDTypography variant="h6">{selectedProject.title}</MDTypography>
+
+                    <MDTypography variant="body2" mt={2}>
+                      {selectedProject.description || "No description"}
+                    </MDTypography>
+
+                    <MDTypography variant="body2" mt={2}>
+                      Status: {selectedProject.status || "N/A"}
+                    </MDTypography>
+                  </MDBox>
+                )}
+              </DialogContent>
+
+              <DialogActions>
+                <Button onClick={() => setDetailsOpen(false)}>Close</Button>
+              </DialogActions>
+            </Dialog>
+
+            <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)} fullWidth maxWidth="xs">
+              <DialogTitle>Delete Project</DialogTitle>
+
+              <DialogContent>
+                <MDTypography variant="body2">
+                  Are you sure you want to delete <strong>{selectedProject?.title}</strong>?
+                </MDTypography>
+              </DialogContent>
+
+              <DialogActions>
+                <Button onClick={() => setDeleteOpen(false)}>Cancel</Button>
+
+                <Button color="error" onClick={confirmDelete}>
+                  Delete
+                </Button>
+              </DialogActions>
+            </Dialog>
+
+            <Dialog open={editOpen} onClose={() => setEditOpen(false)} fullWidth maxWidth="sm">
+              <DialogTitle>Edit Project</DialogTitle>
+
+              <DialogContent>
+                <MDBox py={2}>
+                  <MDInput
+                    label="Project Title"
+                    fullWidth
+                    value={editForm.title}
+                    onChange={(e) =>
+                      setEditForm({
+                        ...editForm,
+                        title: e.target.value,
+                      })
+                    }
+                  />
+
+                  <MDBox mt={2}>
+                    <MDInput
+                      label="Description"
+                      fullWidth
+                      multiline
+                      rows={4}
+                      value={editForm.description}
+                      onChange={(e) =>
+                        setEditForm({
+                          ...editForm,
+                          description: e.target.value,
+                        })
+                      }
+                    />
+                  </MDBox>
+                </MDBox>
+              </DialogContent>
+
+              <DialogActions>
+                <Button onClick={() => setEditOpen(false)}>Cancel</Button>
+
+                <Button variant="contained" onClick={handleUpdateProject}>
+                  Update
+                </Button>
+              </DialogActions>
+            </Dialog>
+
             <Dialog open={openDialog} onClose={handleCloseDialog} fullWidth maxWidth="sm">
               <DialogTitle>Create New Project</DialogTitle>
 

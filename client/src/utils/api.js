@@ -15,10 +15,17 @@ const apiRequest = async (endpoint, options = {}) => {
     headers.Authorization = `Bearer ${token}`;
   }
 
+  const requestBody =
+    options.body !== undefined && typeof options.body !== "string"
+      ? JSON.stringify(options.body)
+      : options.body;
+  console.log("TOKEN:", token);
+  console.log("REQUEST URL:", `${API_URL}${endpoint}`);
+  console.log("HEADERS:", headers);
   const response = await fetch(`${API_URL}${endpoint}`, {
     ...options,
     headers,
-    body: options.body ? JSON.stringify(options.body) : undefined,
+    body: requestBody,
   });
 
   // Try to parse JSON response

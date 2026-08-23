@@ -10,7 +10,68 @@ import MDAvatar from "components/MDAvatar";
 import MDProgress from "components/MDProgress";
 import { useState } from "react";
 
-export default function data(projects = []) {
+const ProjectActions = ({ project, onDetails, onEdit, onDelete }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <>
+      <MDTypography component="a" color="text" sx={{ cursor: "pointer" }} onClick={handleOpen}>
+        <Icon>more_vert</Icon>
+      </MDTypography>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            onDetails(project);
+          }}
+        >
+          Details
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            onEdit(project);
+          }}
+        >
+          Edit
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            onDelete(project);
+          }}
+        >
+          Delete
+        </MenuItem>
+      </Menu>
+    </>
+  );
+};
+
+export default function data(projects = [], onDetails, onEdit, onDelete) {
   const Project = ({ image, name }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
       <MDAvatar src={image} name={name} size="sm" variant="rounded" />
@@ -119,9 +180,12 @@ export default function data(projects = []) {
 
         action: (
           <>
-            <MDTypography component="a" onClick={openMenu} color="text" sx={{ cursor: "pointer" }}>
-              <Icon>more_vert</Icon>
-            </MDTypography>
+            <ProjectActions
+              project={project}
+              onDetails={onDetails}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
 
             <Menu
               id="simple-menu"
