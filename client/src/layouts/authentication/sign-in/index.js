@@ -72,8 +72,7 @@ function Basic() {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      // Redirect to dashboard
-      navigate("/dashboard");
+      window.location.href = "/dashboard";
     } catch (error) {
       const message = error.response?.body?.message || "Unable to login. Please try again.";
 

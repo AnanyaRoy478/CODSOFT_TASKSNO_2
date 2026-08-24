@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect, useMemo } from "react";
-
+import getRoutes from "routes";
 // react-router components
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
@@ -44,7 +44,6 @@ import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
 // PROJECT MANAGEMENT routes
-import routes from "routes";
 
 // PROJECT MANAGEMENT contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
@@ -58,6 +57,8 @@ import SignIn from "layouts/authentication/sign-in";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const {
     miniSidenav,
     direction,
@@ -70,7 +71,6 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
-
   // Cache for the rtl
   useMemo(() => {
     const cacheRtl = createCache({
@@ -108,18 +108,20 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-  const getRoutes = (allRoutes) =>
+  const renderRoutes = (allRoutes) =>
     allRoutes.map((route) => {
       if (route.collapse) {
-        return getRoutes(route.collapse);
+        return renderRoutes(route.collapse);
       }
 
       if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
+        return <Route path={route.route} element={route.component} key={route.key} />;
       }
 
       return null;
     });
+
+  const routes = getRoutes(user);
 
   return direction === "rtl" ? (
     <CacheProvider value={rtlCache}>
@@ -145,7 +147,7 @@ export default function App() {
             <Route path="/authentication/sign-in" element={<SignIn />} />
           </Route>
           {/* Protected routes */}
-          <Route element={<ProtectedRoute />}>{getRoutes(routes)}</Route>
+          <Route element={<ProtectedRoute />}>{renderRoutes(routes)}</Route>
 
           {/* Unknown routes */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
@@ -176,7 +178,7 @@ export default function App() {
         </Route>
 
         {/* Protected routes */}
-        <Route element={<ProtectedRoute />}>{getRoutes(routes)}</Route>
+        <Route element={<ProtectedRoute />}>{renderRoutes(routes)}</Route>
 
         {/* Unknown routes */}
         <Route path="*" element={<Navigate to="/dashboard" replace />} />

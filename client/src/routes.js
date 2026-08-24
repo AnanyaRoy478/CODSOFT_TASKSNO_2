@@ -44,46 +44,48 @@ import Projects from "layouts/tables/projects";
 import Icon from "@mui/material/Icon";
 import Tasks from "layouts/tables/tasks";
 
-const user = JSON.parse(localStorage.getItem("user"));
-const isAdmin = user?.role === "Admin";
+const getRoutes = (user) => {
+  const routes = [
+    {
+      type: "collapse",
+      name: "Dashboard",
+      key: "dashboard",
+      icon: <Icon fontSize="small">dashboard</Icon>,
+      route: "/dashboard",
+      component: <Dashboard />,
+    },
 
-const routes = [
-  {
-    type: "collapse",
-    name: "Dashboard",
-    key: "dashboard",
-    icon: <Icon fontSize="small">dashboard</Icon>,
-    route: "/dashboard",
-    component: <Dashboard />,
-  },
-  ...(isAdmin
-    ? [
-        {
-          type: "collapse",
-          name: "Users",
-          key: "users",
-          icon: <Icon fontSize="small">person</Icon>,
-          route: "/users",
-          component: <Users />,
-        },
-      ]
-    : []),
-  {
-    type: "collapse",
-    name: "Projects",
-    key: "projects",
-    icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/projects",
-    component: <Projects />,
-  },
-  {
-    type: "collapse",
-    name: "tasks",
-    key: "tasks",
-    icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/tasks",
-    component: <Tasks />,
-  },
-];
+    {
+      type: "collapse",
+      name: "Projects",
+      key: "projects",
+      icon: <Icon fontSize="small">table_view</Icon>,
+      route: "/projects",
+      component: <Projects />,
+    },
 
-export default routes;
+    {
+      type: "collapse",
+      name: "Tasks",
+      key: "tasks",
+      icon: <Icon fontSize="small">task</Icon>,
+      route: "/tasks",
+      component: <Tasks />,
+    },
+  ];
+
+  if (user?.role === "Admin") {
+    routes.splice(1, 0, {
+      type: "collapse",
+      name: "Users",
+      key: "users",
+      icon: <Icon fontSize="small">person</Icon>,
+      route: "/users",
+      component: <Users />,
+    });
+  }
+
+  return routes;
+};
+
+export default getRoutes;

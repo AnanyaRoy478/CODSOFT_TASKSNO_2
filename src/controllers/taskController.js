@@ -106,7 +106,8 @@ exports.getTaskById = async (req, res, next) => {
 // Update Task
 exports.updateTask = async (req, res, next) => {
   try {
-    const { title, description, priority,assignedTo, dueDate, status } = req.body;
+    const { title, description, priority, assignedTo, dueDate, status } =
+      req.body;
 
     const task = await Task.findOne({
       _id: req.params.id,
