@@ -44,6 +44,9 @@ import Projects from "layouts/tables/projects";
 import Icon from "@mui/material/Icon";
 import Tasks from "layouts/tables/tasks";
 
+const user = JSON.parse(localStorage.getItem("user"));
+const isAdmin = user?.role === "Admin";
+
 const routes = [
   {
     type: "collapse",
@@ -53,14 +56,18 @@ const routes = [
     route: "/dashboard",
     component: <Dashboard />,
   },
-  {
-    type: "collapse",
-    name: "Users",
-    key: "users",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/users",
-    component: <Users />,
-  },
+  ...(isAdmin
+    ? [
+        {
+          type: "collapse",
+          name: "Users",
+          key: "users",
+          icon: <Icon fontSize="small">person</Icon>,
+          route: "/users",
+          component: <Users />,
+        },
+      ]
+    : []),
   {
     type: "collapse",
     name: "Projects",
