@@ -70,7 +70,9 @@ function Projects() {
     description: "",
     deadline: "",
   });
-
+  const isAdmin = JSON.parse(localStorage.getItem("user"))?.role === "Admin";
+  const isMember = JSON.parse(localStorage.getItem("user"))?.role === "Member";
+  const isManager = JSON.parse(localStorage.getItem("user"))?.role === "Manager";
   const handleEdit = (project) => {
     setSelectedProject(project);
 
@@ -269,15 +271,16 @@ function Projects() {
                 <MDTypography variant="h6" color="white">
                   Projects Table
                 </MDTypography>
-
-                <MDButton
-                  variant="contained"
-                  color="white"
-                  startIcon={<AddIcon />}
-                  onClick={handleOpenDialog}
-                >
-                  Add Project
-                </MDButton>
+                {isManager && (
+                  <MDButton
+                    variant="contained"
+                    color="white"
+                    startIcon={<AddIcon />}
+                    onClick={handleOpenDialog}
+                  >
+                    Add Project
+                  </MDButton>
+                )}
               </MDBox>
 
               <MDBox pt={3}>

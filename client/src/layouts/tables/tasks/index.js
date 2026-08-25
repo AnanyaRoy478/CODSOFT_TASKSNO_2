@@ -74,7 +74,9 @@ function Tasks() {
     dueDate: "",
   });
   const [menu, setMenu] = useState(null);
-
+  const isAdmin = JSON.parse(localStorage.getItem("user"))?.role === "Admin";
+  const isMember = JSON.parse(localStorage.getItem("user"))?.role === "Member";
+  const isManager = JSON.parse(localStorage.getItem("user"))?.role === "Manager";
   const openMenu = (event, task) => {
     setMenu(event.currentTarget);
     setSelectedTask(task);
@@ -407,15 +409,16 @@ function Tasks() {
                 <MDTypography variant="h6" color="white">
                   Tasks Table
                 </MDTypography>
-
-                <MDButton
-                  variant="contained"
-                  color="white"
-                  startIcon={<AddIcon />}
-                  onClick={handleOpenDialog}
-                >
-                  Add Task
-                </MDButton>
+                {isManager ? (
+                  <MDButton
+                    variant="contained"
+                    color="white"
+                    startIcon={<AddIcon />}
+                    onClick={handleOpenDialog}
+                  >
+                    Add Task
+                  </MDButton>
+                ) : null}
               </MDBox>
 
               <MDBox pt={3}>
@@ -646,7 +649,7 @@ function Tasks() {
                 </MDTypography>
               </MDBox>
             )}
-
+{ isManager && (
             <TextField
               fullWidth
               required
@@ -656,7 +659,8 @@ function Tasks() {
               onChange={handleEditChange}
               margin="normal"
             />
-
+)}
+{ isManager && (
             <TextField
               fullWidth
               label="Description"
@@ -667,7 +671,8 @@ function Tasks() {
               multiline
               rows={4}
             />
-
+)}
+{ isManager && (
             <TextField
               select
               fullWidth
@@ -684,7 +689,8 @@ function Tasks() {
                 </MenuItem>
               ))}
             </TextField>
-
+)}
+{ isManager && (
             <TextField
               select
               fullWidth
@@ -702,7 +708,8 @@ function Tasks() {
                 </MenuItem>
               ))}
             </TextField>
-
+)}
+{ isManager && (
             <TextField
               select
               fullWidth
@@ -716,7 +723,7 @@ function Tasks() {
               <MenuItem value="Medium">Medium</MenuItem>
               <MenuItem value="High">High</MenuItem>
             </TextField>
-
+)}
             <TextField
               select
               fullWidth
@@ -732,7 +739,7 @@ function Tasks() {
 
               <MenuItem value="Completed">Completed</MenuItem>
             </TextField>
-
+{ isManager && (
             <TextField
               fullWidth
               label="Deadline"
@@ -745,6 +752,7 @@ function Tasks() {
                 shrink: true,
               }}
             />
+)}
           </DialogContent>
 
           <DialogActions>
