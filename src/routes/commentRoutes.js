@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    addComment,
-    getComments,
-    deleteComment
+  addComment,
+  getComments,
+  deleteComment,
 } = require("../controllers/commentController");
 
 const authMiddleware = require("../middlewares/authMiddleware");

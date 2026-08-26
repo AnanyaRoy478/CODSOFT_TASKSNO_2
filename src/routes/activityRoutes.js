@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    createActivity,
-    getProjectActivities,
-    getTaskActivities
+  createActivity,
+  getProjectActivities,
+  getTaskActivities,
 } = require("../controllers/activityController");
 
 const authMiddleware = require("../middlewares/authMiddleware");
