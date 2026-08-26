@@ -1,6 +1,6 @@
 // const API_URL = import.meta.env.REACT_APP_API_URL;
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://codsoft-tasksno-2-3.onrender.com/api";
 
 const apiRequest = async (endpoint, options = {}) => {
   const token = localStorage.getItem("token");

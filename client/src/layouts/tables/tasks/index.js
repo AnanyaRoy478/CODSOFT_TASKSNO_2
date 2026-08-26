@@ -649,81 +649,81 @@ function Tasks() {
                 </MDTypography>
               </MDBox>
             )}
-{ isManager && (
-            <TextField
-              fullWidth
-              required
-              label="Task Title"
-              name="title"
-              value={editForm.title}
-              onChange={handleEditChange}
-              margin="normal"
-            />
-)}
-{ isManager && (
-            <TextField
-              fullWidth
-              label="Description"
-              name="description"
-              value={editForm.description}
-              onChange={handleEditChange}
-              margin="normal"
-              multiline
-              rows={4}
-            />
-)}
-{ isManager && (
-            <TextField
-              select
-              fullWidth
-              required
-              label="Project"
-              name="project"
-              value={editForm.project}
-              onChange={handleEditChange}
-              margin="normal"
-            >
-              {projects.map((project) => (
-                <MenuItem key={project._id} value={project._id}>
-                  {project.title}
-                </MenuItem>
-              ))}
-            </TextField>
-)}
-{ isManager && (
-            <TextField
-              select
-              fullWidth
-              label="Assigned To"
-              name="assignedTo"
-              value={editForm.assignedTo}
-              onChange={handleEditChange}
-              margin="normal"
-            >
-              <MenuItem value="">Unassigned</MenuItem>
+            {isManager && (
+              <TextField
+                fullWidth
+                required
+                label="Task Title"
+                name="title"
+                value={editForm.title}
+                onChange={handleEditChange}
+                margin="normal"
+              />
+            )}
+            {isManager && (
+              <TextField
+                fullWidth
+                label="Description"
+                name="description"
+                value={editForm.description}
+                onChange={handleEditChange}
+                margin="normal"
+                multiline
+                rows={4}
+              />
+            )}
+            {isManager && (
+              <TextField
+                select
+                fullWidth
+                required
+                label="Project"
+                name="project"
+                value={editForm.project}
+                onChange={handleEditChange}
+                margin="normal"
+              >
+                {projects.map((project) => (
+                  <MenuItem key={project._id} value={project._id}>
+                    {project.title}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+            {isManager && (
+              <TextField
+                select
+                fullWidth
+                label="Assigned To"
+                name="assignedTo"
+                value={editForm.assignedTo}
+                onChange={handleEditChange}
+                margin="normal"
+              >
+                <MenuItem value="">Unassigned</MenuItem>
 
-              {users.map((user) => (
-                <MenuItem key={user._id} value={user._id}>
-                  {user.name} ({user.email})
-                </MenuItem>
-              ))}
-            </TextField>
-)}
-{ isManager && (
-            <TextField
-              select
-              fullWidth
-              label="Priority"
-              name="priority"
-              value={editForm.priority}
-              onChange={handleEditChange}
-              margin="normal"
-            >
-              <MenuItem value="Low">Low</MenuItem>
-              <MenuItem value="Medium">Medium</MenuItem>
-              <MenuItem value="High">High</MenuItem>
-            </TextField>
-)}
+                {users.map((user) => (
+                  <MenuItem key={user._id} value={user._id}>
+                    {user.name} ({user.email})
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+            {isManager && (
+              <TextField
+                select
+                fullWidth
+                label="Priority"
+                name="priority"
+                value={editForm.priority}
+                onChange={handleEditChange}
+                margin="normal"
+              >
+                <MenuItem value="Low">Low</MenuItem>
+                <MenuItem value="Medium">Medium</MenuItem>
+                <MenuItem value="High">High</MenuItem>
+              </TextField>
+            )}
             <TextField
               select
               fullWidth
@@ -739,20 +739,20 @@ function Tasks() {
 
               <MenuItem value="Completed">Completed</MenuItem>
             </TextField>
-{ isManager && (
-            <TextField
-              fullWidth
-              label="Deadline"
-              name="dueDate"
-              type="date"
-              value={editForm.dueDate}
-              onChange={handleEditChange}
-              margin="normal"
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-)}
+            {isManager && (
+              <TextField
+                fullWidth
+                label="Deadline"
+                name="dueDate"
+                type="date"
+                value={editForm.dueDate}
+                onChange={handleEditChange}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            )}
           </DialogContent>
 
           <DialogActions>
