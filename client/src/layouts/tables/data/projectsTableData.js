@@ -20,7 +20,6 @@ const ProjectActions = ({ project, onDetails, onEdit, onDelete }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   return (
     <>
       <MDTypography component="a" color="text" sx={{ cursor: "pointer" }} onClick={handleOpen}>

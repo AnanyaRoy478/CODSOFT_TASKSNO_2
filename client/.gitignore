@@ -23,5 +23,7 @@ yarn-error.log*
 
 package-lock.json
 yarn.lock
-
+node_modules
+build
+.env
 commit.sh
