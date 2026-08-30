@@ -434,7 +434,7 @@ function Tasks() {
                       {error}
                     </MDTypography>
                   </MDBox>
-                ) : tasks.length === 0 ? (
+                ) : tasks.length < 1 ? (
                   <MDBox py={5} textAlign="center">
                     <MDTypography variant="h6" color="text">
                       No tasks found.
@@ -701,12 +701,13 @@ function Tasks() {
                 margin="normal"
               >
                 <MenuItem value="">Unassigned</MenuItem>
-
-                {users.map((user) => (
-                  <MenuItem key={user._id} value={user._id}>
-                    {user.name} ({user.email})
-                  </MenuItem>
-                ))}
+                {users
+                  .filter((user) => user.role === "Member")
+                  .map((user) => (
+                    <MenuItem key={user._id} value={user._id}>
+                      {user.name} ({user.email})
+                    </MenuItem>
+                  ))}
               </TextField>
             )}
             {isManager && (

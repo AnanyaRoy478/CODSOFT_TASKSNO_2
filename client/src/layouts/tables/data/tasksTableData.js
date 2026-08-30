@@ -55,6 +55,10 @@ export default function data(
     }
   };
 
+  const isManager = JSON.parse(localStorage.getItem("user"))?.role === "Manager";
+  const isAdmin = JSON.parse(localStorage.getItem("user"))?.role === "Admin";
+  const userId = JSON.parse(localStorage.getItem("user"))?.id;
+
   const formatDate = (date) => {
     if (!date) {
       return "No date";
@@ -63,6 +67,10 @@ export default function data(
     return new Date(date).toLocaleDateString();
   };
 
+  const filteredTasks =
+    isManager || isAdmin
+      ? tasks
+      : tasks.filter((task) => task.assignedTo && String(task.assignedTo._id) == String(userId));
   return {
     columns: [
       {
@@ -103,7 +111,7 @@ export default function data(
       },
     ],
 
-    rows: tasks.map((task) => ({
+    rows: filteredTasks.map((task) => ({
       task: (
         <MDBox lineHeight={1}>
           <MDTypography display="block" variant="button" fontWeight="medium">
@@ -207,20 +215,21 @@ export default function data(
             >
               Edit
             </MenuItem>
+            {isManager && (
+              <MenuItem
+                onClick={() => {
+                  const taskToDelete = selectedTask;
 
-            <MenuItem
-              onClick={() => {
-                const taskToDelete = selectedTask;
+                  closeMenu();
 
-                closeMenu();
-
-                if (taskToDelete) {
-                  onDelete(taskToDelete);
-                }
-              }}
-            >
-              Delete
-            </MenuItem>
+                  if (taskToDelete) {
+                    onDelete(taskToDelete);
+                  }
+                }}
+              >
+                Delete
+              </MenuItem>
+            )}
           </Menu>
         </>
       ),
