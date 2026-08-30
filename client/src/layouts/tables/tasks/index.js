@@ -701,12 +701,13 @@ function Tasks() {
                 margin="normal"
               >
                 <MenuItem value="">Unassigned</MenuItem>
-
-                {users.map((user) => (
-                  <MenuItem key={user._id} value={user._id}>
-                    {user.name} ({user.email})
-                  </MenuItem>
-                ))}
+                {users
+                  .filter((user) => user.role === "Member")
+                  .map((user) => (
+                    <MenuItem key={user._id} value={user._id}>
+                      {user.name} ({user.email})
+                    </MenuItem>
+                  ))}
               </TextField>
             )}
             {isManager && (

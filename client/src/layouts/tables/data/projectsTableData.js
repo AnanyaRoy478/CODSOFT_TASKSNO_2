@@ -20,6 +20,9 @@ const ProjectActions = ({ project, onDetails, onEdit, onDelete }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const isManager = JSON.parse(localStorage.getItem("user"))?.role === "Manager";
+
   return (
     <>
       <MDTypography component="a" color="text" sx={{ cursor: "pointer" }} onClick={handleOpen}>
@@ -125,7 +128,7 @@ export default function data(projects = [], onDetails, onEdit, onDelete) {
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
-
+  const isManager = JSON.parse(localStorage.getItem("user"))?.role === "Manager";
   return {
     columns: [
       {

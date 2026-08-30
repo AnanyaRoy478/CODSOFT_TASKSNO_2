@@ -55,6 +55,8 @@ export default function data(
     }
   };
 
+  const isManager = JSON.parse(localStorage.getItem("user"))?.role === "Manager";
+
   const formatDate = (date) => {
     if (!date) {
       return "No date";
