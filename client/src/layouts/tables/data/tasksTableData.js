@@ -56,7 +56,8 @@ export default function data(
   };
 
   const isManager = JSON.parse(localStorage.getItem("user"))?.role === "Manager";
-  const userId = JSON.parse(localStorage.getItem("user"))?._id;
+  const isAdmin = JSON.parse(localStorage.getItem("user"))?.role === "Admin";
+  const userId = JSON.parse(localStorage.getItem("user"))?.id;
 
   const formatDate = (date) => {
     if (!date) {
@@ -66,9 +67,10 @@ export default function data(
     return new Date(date).toLocaleDateString();
   };
 
-  const filteredTasks = isManager
-    ? tasks
-    : tasks.filter((task) => task.assignedTo && String(task.assignedTo._id) === String(userId));
+  const filteredTasks =
+    isManager || isAdmin
+      ? tasks
+      : tasks.filter((task) => task.assignedTo && String(task.assignedTo._id) == String(userId));
   return {
     columns: [
       {
