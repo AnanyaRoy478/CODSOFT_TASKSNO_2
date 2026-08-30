@@ -207,20 +207,21 @@ export default function data(
             >
               Edit
             </MenuItem>
+            {isManager && (
+              <MenuItem
+                onClick={() => {
+                  const taskToDelete = selectedTask;
 
-            <MenuItem
-              onClick={() => {
-                const taskToDelete = selectedTask;
+                  closeMenu();
 
-                closeMenu();
-
-                if (taskToDelete) {
-                  onDelete(taskToDelete);
-                }
-              }}
-            >
-              Delete
-            </MenuItem>
+                  if (taskToDelete) {
+                    onDelete(taskToDelete);
+                  }
+                }}
+              >
+                Delete
+              </MenuItem>
+            )}
           </Menu>
         </>
       ),

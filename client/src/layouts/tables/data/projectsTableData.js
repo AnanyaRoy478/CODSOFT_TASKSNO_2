@@ -201,8 +201,8 @@ export default function data(projects = [], onDetails, onEdit, onDelete) {
               onClose={closeMenu}
             >
               <MenuItem onClick={closeMenu}>Details</MenuItem>
-              <MenuItem onClick={closeMenu}>Edit</MenuItem>
-              <MenuItem onClick={closeMenu}>Delete</MenuItem>
+              {isManager && (<MenuItem onClick={closeMenu}>Edit</MenuItem>)}
+              {isManager && (<MenuItem onClick={closeMenu}>Delete</MenuItem>)}
             </Menu>
           </>
         ),
