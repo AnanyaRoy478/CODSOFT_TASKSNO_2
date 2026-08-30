@@ -434,7 +434,7 @@ function Tasks() {
                       {error}
                     </MDTypography>
                   </MDBox>
-                ) : tasks.length === 0 ? (
+                ) : tasks.length < 1 ? (
                   <MDBox py={5} textAlign="center">
                     <MDTypography variant="h6" color="text">
                       No tasks found.

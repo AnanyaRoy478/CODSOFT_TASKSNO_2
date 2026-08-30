@@ -56,6 +56,7 @@ export default function data(
   };
 
   const isManager = JSON.parse(localStorage.getItem("user"))?.role === "Manager";
+  const userId = JSON.parse(localStorage.getItem("user"))?._id;
 
   const formatDate = (date) => {
     if (!date) {
@@ -65,6 +66,9 @@ export default function data(
     return new Date(date).toLocaleDateString();
   };
 
+  const filteredTasks = isManager
+    ? tasks
+    : tasks.filter((task) => task.assignedTo && String(task.assignedTo._id) === String(userId));
   return {
     columns: [
       {
@@ -105,7 +109,7 @@ export default function data(
       },
     ],
 
-    rows: tasks.map((task) => ({
+    rows: filteredTasks.map((task) => ({
       task: (
         <MDBox lineHeight={1}>
           <MDTypography display="block" variant="button" fontWeight="medium">
